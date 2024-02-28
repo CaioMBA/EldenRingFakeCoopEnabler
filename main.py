@@ -2,6 +2,7 @@ import os, shutil, time, psutil, configparser, json
 from Services.UtilsService import Utils
 from Services.GoogleDriveService import GoogleDrive
 from Services.GameDownloader import GameDownloader
+from Services.OneDriveService import OneDrive
 class ReplaceFiles():
     def __init__(self, jsonDict:dict):
         for key in jsonDict.keys():
@@ -26,39 +27,30 @@ class ReplaceFiles():
             'Folders': ['mod', 'modengine2', 'movie']
         }
         if jsonDict['EldenRingFixPath'] == '':
-            self.EldenRingFixPath = GoogleDrive().DownloadGoogleDriveFile('1gUqZSvDwGTloZDqVHqxNzJVBqVDEQpIt')
+            self.EldenRingFixPath = GoogleDrive().DownloadGoogleDriveFile('1gUqZSvDwGTloZDqVHqxNzJVBqVDEQpIt', 'EldenRing_FIX_PIRATE_ORIGINAL.zip')
             self.EldenRingFixPath += r'\EldenRing_FIX_PIRATE_ORIGINAL'
             Utils().updateJsonConfig('EldenRingFixPath', self.EldenRingFixPath)
         if jsonDict['EldenRingDubPath'] == '':
-            self.EldenRingDubPath = GoogleDrive().DownloadGoogleDriveFile('1Rl-93Ki29EK3M--RGX4JmClD5xizy8uB')
+            self.EldenRingDubPath = OneDrive().DownloadFile('https://1drv.ms/u/s!Au9PHb822TTUpPAHPlMDKvZolUnDaw','EldenRingDubPT-BR.zip')
             self.EldenRingDubPath += r'\EldenRingDubPT-BR'
             Utils().updateJsonConfig('EldenRingDubPath', self.EldenRingDubPath)
 
-
-
-    def is_steam_running(self):
-        for process in psutil.process_iter(['pid', 'name']):
-            if 'steam.exe' in process.name():
-                time.sleep(5)
-                return True
-        return False
-
-    def CheckSpaceWar(self):
+    def CheckSpaceWarInstallation(self):
+        if not Utils().CheckIfAppIsRunning('steam.exe'):
+            os.system('start steam://open/steam')
         if self.SpaceWarGamePath != '' and os.path.exists(self.SpaceWarGamePath):
             return
-        print('ABRA A STEAM PARA PROSSEGUIR!')
         while True:
-            if self.is_steam_running():
-                print('Steam aberta!')
+            if Utils().CheckIfAppIsRunning('steam.exe'):
+                print('Steam aberta! com sucesso')
                 break
-        print('INSTALE O SPACE WAR PARA FUNCIONAR CORRETAMENTE!')
-        print('CONFIGURE O CONTROLE NO SPACE WAR PARA!')
-        print('O TEMPLATE DE ELDEN RING(DENTRO DA STEAM)!')
+        print('DOWNLOADING|INSTALLING SPACE WAR SO ELDEN RING WORKS!')
+        print('SETUP CONTROLLER TEMPLATE ON SPACE WAR FOR ELDEN RING(INSIDE STEAM)!')
         time.sleep(2)
-        os.system('start steam://install/480')
+        self.SpaceWarGamePath = GameDownloader().SpaceWarDownloadOrUpdate()
+        #Old way to download SpaceWar
+        #os.system('start steam://install/480')
         time.sleep(7.5)
-        self.SpaceWarGamePath = input("Coloque o caminho para a pasta Game do SpaceWar (Ex: "
-                                     r"%programfiles(x86)%\Steam\steamapps\common\SpaceWar): ")
         Utils().updateJsonConfig('SpaceWarGamePath', self.SpaceWarGamePath)
 
     def EnablePirateGame(self):
@@ -143,7 +135,7 @@ class ReplaceFiles():
                     os.remove(os.path.join(root,fileName))
             for dirName in dirs:
                 if str(dirName).lower() in self.DubArchives['Folders']:
-                    if os.path.exists(backup_path) and dirName == 'movie':
+                    if not os.path.exists(backup_path) and dirName == 'movie':
                         continue
                     shutil.rmtree(os.path.join(root, dirName))
         try:
@@ -215,7 +207,7 @@ class ReplaceFiles():
                 match choice:
                     case "1":
                         print("Enabling play with Pirate Game")
-                        self.CheckSpaceWar()
+                        self.CheckSpaceWarInstallation()
                         self.EnablePirateGame()
                         Utils().clear_console()
                         print("Pirate Game CO-OP enabled!")
@@ -270,17 +262,12 @@ class ReplaceFiles():
 
 if '__main__' == __name__:
     try:
-        with open('appconfig.json', 'r') as f:
-            jsonString = f.read()
-            jsonDict = json.loads(jsonString)
+        jsonDict = Utils().ReadJsonConfig()
     except Exception as e:
         print("Não foi possível abrir o arquivo appconfig.json")
         print("Por favor, preencha as informações necessárias para o funcionamento do programa.")
         print("Caso não tenha o caminho deixe vazio")
         Utils().CreateJsonConfig()
-        with open('appconfig.json', 'r') as f:
-            jsonString = f.read()
-            jsonDict = json.loads(jsonString)
+        jsonDict = Utils().ReadJsonConfig()
 
-    replacer = ReplaceFiles(jsonDict)
-    replacer.menu()
+    ReplaceFiles(jsonDict).menu()
