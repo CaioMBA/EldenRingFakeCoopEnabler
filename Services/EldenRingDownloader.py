@@ -60,7 +60,7 @@ class DownloadAndInstallEldenRing():
             "+app_update", EldenRingGameID, "validate", "+quit"
         ]
 
-        print('Starting download...')
+        print('Starting download/update...')
         try:
             subprocess.run(cmd, check=True, shell=True)
             return download_path

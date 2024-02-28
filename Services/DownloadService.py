@@ -1,6 +1,6 @@
 import requests, os, zipfile
 from tqdm import tqdm
-from Services.JsonServices import JsonServices
+from Services.UtilsService import Utils
 
 class DownloadAndUnzip():
     def download_google_drive_file(self, Id: str):
@@ -42,6 +42,6 @@ class DownloadAndUnzip():
                 keyJson = 'EldenRingFixPath'
             case 'ELDENRINGDUBPT-BR':
                 keyJson = 'EldenRingDubPath'
-        JsonServices().updateJsonConfig(keyJson, PathResponse)
+        Utils().updateJsonConfig(keyJson, PathResponse)
         print(f'ARQUIVO DESCOMPACTADO!')
         return PathResponse

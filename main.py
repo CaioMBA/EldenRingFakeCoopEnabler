@@ -212,7 +212,7 @@ class ReplaceFiles():
                 print("4. Enable Brazilian-Portuguese Dubbing")
                 print("5. Disable Brazilian-Portuguese Dubbing")
                 print("6. Change Coop Password")
-                print("7. Download and Install Elden Ring")
+                print("7. Download-Install/Update Elden Ring")
                 print("0. Exit")
                 choice = input("Enter choice: ")
                 match choice:
