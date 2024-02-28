@@ -1,6 +1,7 @@
 import os, shutil, time, psutil, configparser, json
-from Services.JsonServices import JsonServices
+from Services.UtilsService import Utils
 from Services.DownloadService import DownloadAndUnzip
+from Services.EldenRingDownloader import DownloadAndInstallEldenRing
 class ReplaceFiles():
     def __init__(self, jsonDict:dict):
         for key in jsonDict.keys():
@@ -61,7 +62,7 @@ class ReplaceFiles():
         time.sleep(7.5)
         self.SpaceWarGamePath = input("Coloque o caminho para a pasta Game do SpaceWar (Ex: "
                                      r"%programfiles(x86)%\Steam\steamapps\common\SpaceWar): ")
-        JsonServices().updateJsonConfig('SpaceWarGamePath', self.SpaceWarGamePath)
+        Utils().updateJsonConfig('SpaceWarGamePath', self.SpaceWarGamePath)
 
     def EnablePirateGame(self):
         if self.EldenRingFixPath == '' or not os.path.exists(self.EldenRingFixPath):
@@ -137,7 +138,7 @@ class ReplaceFiles():
                 if str(dirName).lower() in self.PirateFiles:
                     shutil.rmtree(os.path.join(root,dirName))
 
-    def DisabelDub(self):
+    def DisableDub(self):
         backup_path = os.path.join(self.EldenRingGamePath, 'movie_backup')
         for root, dirs, files in os.walk(self.EldenRingGamePath):
             for fileName in files:
@@ -211,7 +212,8 @@ class ReplaceFiles():
                 print("4. Enable Brazilian-Portuguese Dubbing")
                 print("5. Disable Brazilian-Portuguese Dubbing")
                 print("6. Change Coop Password")
-                print("7. Exit")
+                print("7. Download and Install Elden Ring")
+                print("0. Exit")
                 choice = input("Enter choice: ")
                 match choice:
                     case "1":
@@ -237,7 +239,7 @@ class ReplaceFiles():
                         print("Brazilian-Portuguese Dubbing enabled!")
                     case "5":
                         print("Disabling Brazilian-Portuguese Dubbing")
-                        self.DisabelDub()
+                        self.DisableDub()
                         self.clear_console()
                         print("Brazilian-Portuguese Dubbing disabled!")
                     case "6":
@@ -246,6 +248,17 @@ class ReplaceFiles():
                         self.clear_console()
                         print(f"Coop Password changed! Now: {newPass}")
                     case "7":
+                        print("Downloading and Installing Elden Ring")
+                        GamePath = DownloadAndInstallEldenRing().download_elden_ring()
+                        if GamePath != None:
+                            self.EldenRingGamePath = GamePath
+                            Utils().updateJsonConfig('EldenRingGamePath', self.EldenRingGamePath)
+                        self.clear_console()
+                        if GamePath != None:
+                            print(f'Download and Install Elden Ring completed! Path: {self.EldenRingGamePath}')
+                        else:
+                            print(f'Failed to download Elden Ring')
+                    case "0":
                         print("Exiting...")
                         self.clear_console()
                         break
@@ -267,7 +280,10 @@ if '__main__' == __name__:
         print("Não foi possível abrir o arquivo appconfig.json")
         print("Por favor, preencha as informações necessárias para o funcionamento do programa.")
         print("Caso não tenha o caminho deixe vazio")
-        JsonServices().CreateJsonConfi()
+        Utils().CreateJsonConfig()
+        with open('appconfig.json', 'r') as f:
+            jsonString = f.read()
+            jsonDict = json.loads(jsonString)
 
     replacer = ReplaceFiles(jsonDict)
     replacer.menu()

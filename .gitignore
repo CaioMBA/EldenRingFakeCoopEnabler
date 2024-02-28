@@ -8,6 +8,8 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+.idea/
+steamcmd/
 build/
 develop-eggs/
 dist/
