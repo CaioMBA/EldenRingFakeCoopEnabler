@@ -5,16 +5,15 @@ from Services.GameDownloader import GameDownloader
 from Services.OneDriveService import OneDrive
 class ReplaceFiles():
     def __init__(self, jsonDict:dict):
-        for key in jsonDict.keys():
-            jsonDict[key] = jsonDict[key].replace('%programfiles(x86)%', os.environ.get('ProgramFiles(x86)', ''))
-            jsonDict[key] = jsonDict[key].replace('%userprofile%', os.path.expanduser('~'))
-            jsonDict[key] = jsonDict[key].replace('%programdata%', os.environ.get('ProgramData', ''))
-            jsonDict[key] = jsonDict[key].replace('%localappdata%', os.environ.get('LocalAppData', ''))
-            jsonDict[key] = jsonDict[key].replace('%appdata%', os.environ.get('AppData', ''))
-            jsonDict[key] = jsonDict[key].replace('%temp%', os.environ.get('TEMP', ''))
-            jsonDict[key] = jsonDict[key].replace('%windir%', os.environ.get('WINDIR', ''))
-            jsonDict[key] = jsonDict[key].replace('%systemroot%', os.environ.get('SystemRoot', ''))
-            jsonDict[key] = jsonDict[key].replace('%systemdrive%', os.environ.get('SystemDrive', ''))
+        jsonDict = Utils().FixJsonConfigValues(jsonDict)
+        if jsonDict['EldenRingFixPath'] == '':
+            self.EldenRingFixPath = GoogleDrive().DownloadGoogleDriveFile('1gUqZSvDwGTloZDqVHqxNzJVBqVDEQpIt', 'EldenRing_FIX_PIRATE_ORIGINAL.zip')
+            self.EldenRingFixPath += r'\EldenRing_FIX_PIRATE_ORIGINAL'
+            Utils().updateJsonConfig('EldenRingFixPath', self.EldenRingFixPath)
+        if jsonDict['EldenRingDubPath'] == '':
+            self.EldenRingDubPath = OneDrive().DownloadFile('https://1drv.ms/u/s!Au9PHb822TTUpPAHPlMDKvZolUnDaw','EldenRingDubPT-BR.zip')
+            self.EldenRingDubPath += r'\EldenRingDubPT-BR'
+            Utils().updateJsonConfig('EldenRingDubPath', self.EldenRingDubPath)
         self.EldenRingGamePath = jsonDict['EldenRingGamePath']
         self.SpaceWarGamePath = jsonDict['SpaceWarGamePath']
         self.EldenRingFixPath = jsonDict['EldenRingFixPath']
@@ -26,14 +25,6 @@ class ReplaceFiles():
                       'modengine2_launcher.exe', 'readme.txt'],
             'Folders': ['mod', 'modengine2', 'movie']
         }
-        if jsonDict['EldenRingFixPath'] == '':
-            self.EldenRingFixPath = GoogleDrive().DownloadGoogleDriveFile('1gUqZSvDwGTloZDqVHqxNzJVBqVDEQpIt', 'EldenRing_FIX_PIRATE_ORIGINAL.zip')
-            self.EldenRingFixPath += r'\EldenRing_FIX_PIRATE_ORIGINAL'
-            Utils().updateJsonConfig('EldenRingFixPath', self.EldenRingFixPath)
-        if jsonDict['EldenRingDubPath'] == '':
-            self.EldenRingDubPath = OneDrive().DownloadFile('https://1drv.ms/u/s!Au9PHb822TTUpPAHPlMDKvZolUnDaw','EldenRingDubPT-BR.zip')
-            self.EldenRingDubPath += r'\EldenRingDubPT-BR'
-            Utils().updateJsonConfig('EldenRingDubPath', self.EldenRingDubPath)
 
     def CheckSpaceWarInstallation(self):
         if not Utils().CheckIfAppIsRunning('steam.exe'):

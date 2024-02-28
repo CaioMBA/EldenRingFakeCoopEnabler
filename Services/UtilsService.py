@@ -37,6 +37,7 @@ class Utils():
             f.write(self.TransformDictToJson(jsonDict))
         print("File appconfig.json successfully made!")
 
+
     def updateJsonConfig(self, key:str, value:str):
         with open(f'./appconfig.json', 'r+') as f:
             jsonDict = json.load(f)
@@ -49,6 +50,19 @@ class Utils():
         with open('appconfig.json', 'r') as f:
             jsonString = f.read()
             return json.loads(jsonString)
+
+    def FixJsonConfigValues(self, jsonDict:dict):
+        for key in jsonDict.keys():
+            jsonDict[key] = jsonDict[key].replace('%programfiles(x86)%', os.environ.get('ProgramFiles(x86)', ''))
+            jsonDict[key] = jsonDict[key].replace('%userprofile%', os.path.expanduser('~'))
+            jsonDict[key] = jsonDict[key].replace('%programdata%', os.environ.get('ProgramData', ''))
+            jsonDict[key] = jsonDict[key].replace('%localappdata%', os.environ.get('LocalAppData', ''))
+            jsonDict[key] = jsonDict[key].replace('%appdata%', os.environ.get('AppData', ''))
+            jsonDict[key] = jsonDict[key].replace('%temp%', os.environ.get('TEMP', ''))
+            jsonDict[key] = jsonDict[key].replace('%windir%', os.environ.get('WINDIR', ''))
+            jsonDict[key] = jsonDict[key].replace('%systemroot%', os.environ.get('SystemRoot', ''))
+            jsonDict[key] = jsonDict[key].replace('%systemdrive%', os.environ.get('SystemDrive', ''))
+        return jsonDict
 
     def DeCompress(self, fileName:str, FinalPath:str):
         with zipfile.ZipFile(fileName, 'r') as zip_ref:
