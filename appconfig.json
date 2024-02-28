@@ -1,6 +1,6 @@
 {
     "EldenRingGamePath": "%programfiles(x86)%\\Steam\\steamapps\\common\\ELDEN RING\\Game",
-    "EldenRingFixPath": "%userprofile%\\OneDrive\\Documents\\EldenRing_FIX_PIRATE_ORIGINAL",
-    "EldenRingDubPath": "%userprofile%\\OneDrive\\Documents\\EldenRingDubPT-BR",
+    "EldenRingFixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\EldenRing_FIX_PIRATE_ORIGINAL",
+    "EldenRingDubPath": "\\EldenRingDubPT-BR",
     "SpaceWarGamePath": "%programfiles(x86)%\\Steam\\steamapps\\common\\SpaceWar"
 }

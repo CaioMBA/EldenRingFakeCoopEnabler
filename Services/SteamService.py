@@ -1,16 +1,9 @@
-import io,os,zipfile,requests, subprocess, ctypes
+import io,os,zipfile,requests, subprocess
 from tqdm import tqdm
-from ctypes import wintypes
 from Services.UtilsService import Utils
-class DownloadAndInstallEldenRing():
-    def run_as_admin(self, command, params=None):
-        shell32 = ctypes.windll.shell32
-        if params is None:
-            params = ''
-        show_cmd = wintypes.INT(1)
-        wintypes.HINSTANCE(shell32.ShellExecuteW(None, 'runas', command, params, None, show_cmd))
 
-    def install_steamcmd(self):
+class Steam():
+    def InstallSteamCMD(self):
         if not os.path.exists("steamcmd"):
             os.makedirs("steamcmd")
 
@@ -38,26 +31,26 @@ class DownloadAndInstallEldenRing():
         else:
             print("Failed to download SteamCMD")
 
-    def run_steamcmd_command(self):
+    def RunSteamCMDUpdateFunction(self, GameId:str, SteamGameName:str):
         if not os.path.exists("steamcmd"):
-            self.install_steamcmd()
+            self.InstallSteamCMD()
 
         SteamCMDPath = os.path.join(os.getcwd(), "steamcmd", "steamcmd.exe")
 
         user = "qq270606505"
         password = "SNSD0O123456789"
-        EldenRingGameID = "1245620"
-        download_path = os.path.join(Utils().get_steam_installation_directory(), 'ELDEN RING')
+        download_path = Utils().get_steam_installation_directory()
         if download_path is None:
-            download_path = os.path.join(os.path.expanduser('~'), 'Downloads', 'ELDEN RING')
+            download_path = os.path.expanduser('~'), 'Downloads'
 
+        download_path = os.path.join(download_path, SteamGameName)
 
 
         cmd = [
             SteamCMDPath,
             "+force_install_dir", download_path,
             "+login", user, password,
-            "+app_update", EldenRingGameID, "validate", "+quit"
+            "+app_update", GameId, "validate", "+quit"
         ]
 
         print('Starting download/update...')
@@ -67,14 +60,8 @@ class DownloadAndInstallEldenRing():
         except subprocess.CalledProcessError as e:
             print("Failed to download Elden Ring, error:", e)
             return None
-        #ANTIGO CÓDIGO PARA EXECUTAR COMO ADM
+        # ANTIGO CÓDIGO PARA EXECUTAR COMO ADM
         # try:
-        #     self.run_as_admin(SteamCMDPath, ' '.join(cmd))
+        #     Utils().RunShellAsAdmin(SteamCMDPath, ' '.join(cmd))
         # except RuntimeError as e:
         #     print("Error:", e)
-
-    def download_elden_ring(self):
-        try:
-            self.run_steamcmd_command()
-        except Exception as e:
-            print(f'Failed to download Elden Ring, erro: {e}')

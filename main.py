@@ -1,7 +1,7 @@
 import os, shutil, time, psutil, configparser, json
 from Services.UtilsService import Utils
-from Services.DownloadService import DownloadAndUnzip
-from Services.EldenRingDownloader import DownloadAndInstallEldenRing
+from Services.GoogleDriveService import GoogleDrive
+from Services.GameDownloader import GameDownloader
 class ReplaceFiles():
     def __init__(self, jsonDict:dict):
         for key in jsonDict.keys():
@@ -26,18 +26,15 @@ class ReplaceFiles():
             'Folders': ['mod', 'modengine2', 'movie']
         }
         if jsonDict['EldenRingFixPath'] == '':
-            DownloadAndUnzip().download_google_drive_file('1gUqZSvDwGTloZDqVHqxNzJVBqVDEQpIt')
-            self.EldenRingFixPath = DownloadAndUnzip().unzipFile(r'EldenRing_FIX_PIRATE_ORIGINAL')
+            self.EldenRingFixPath = GoogleDrive().DownloadGoogleDriveFile('1gUqZSvDwGTloZDqVHqxNzJVBqVDEQpIt')
+            self.EldenRingFixPath += r'\EldenRing_FIX_PIRATE_ORIGINAL'
+            Utils().updateJsonConfig('EldenRingFixPath', self.EldenRingFixPath)
         if jsonDict['EldenRingDubPath'] == '':
-            DownloadAndUnzip().download_google_drive_file('1Rl-93Ki29EK3M--RGX4JmClD5xizy8uB')
-            self.EldenRingDubPath = DownloadAndUnzip().unzipFile(r'EldenRingDubPT-BR')
+            self.EldenRingDubPath = GoogleDrive().DownloadGoogleDriveFile('1Rl-93Ki29EK3M--RGX4JmClD5xizy8uB')
+            self.EldenRingDubPath += r'\EldenRingDubPT-BR'
+            Utils().updateJsonConfig('EldenRingDubPath', self.EldenRingDubPath)
 
-    def clear_console(self):
-        operational_system = os.name
-        if operational_system == 'posix':  # Linux ou macOS
-            os.system('clear')
-        elif operational_system == 'nt':  # Windows
-            os.system('cls')
+
 
     def is_steam_running(self):
         for process in psutil.process_iter(['pid', 'name']):
@@ -163,7 +160,7 @@ class ReplaceFiles():
             config.write(iniFile)
 
     def ShowAvailableLanguages(self):
-        self.clear_console()
+        Utils().clear_console()
         LanguageDict = {
             1: 'english',
             2: 'brazilian',
@@ -189,7 +186,7 @@ class ReplaceFiles():
             LanguageChoice = input("Choose the language [ ONLY NUMBER ON THE LEFT ]: ")
             if LanguageChoice.isdigit() and int(LanguageChoice) in LanguageDict.keys():
                 return LanguageDict[int(LanguageChoice)]
-            self.clear_console()
+            Utils().clear_console()
             print("Invalid choice, choose another one")
 
     def ChangeCoopPassword(self):
@@ -203,7 +200,7 @@ class ReplaceFiles():
         return config['PASSWORD']['cooppassword']
 
     def menu(self):
-        self.clear_console()
+        Utils().clear_console()
         try:
             while True:
                 print("1. Enable play with Pirate Game")
@@ -220,54 +217,54 @@ class ReplaceFiles():
                         print("Enabling play with Pirate Game")
                         self.CheckSpaceWar()
                         self.EnablePirateGame()
-                        self.clear_console()
+                        Utils().clear_console()
                         print("Pirate Game CO-OP enabled!")
                     case "2":
                         print("Disable play with Pirate Game")
                         self.DisablePirateGame()
-                        self.clear_console()
+                        Utils().clear_console()
                         print("Pirate Game CO-OP disabled!")
                     case "3":
                         print("Changing Language")
                         self.ChangeLanguage()
-                        self.clear_console()
+                        Utils().clear_console()
                         print("Language changed!")
                     case "4":
                         print("Enabling Brazilian-Portuguese Dubbing")
                         self.EnableDub()
-                        self.clear_console()
+                        Utils().clear_console()
                         print("Brazilian-Portuguese Dubbing enabled!")
                     case "5":
                         print("Disabling Brazilian-Portuguese Dubbing")
                         self.DisableDub()
-                        self.clear_console()
+                        Utils().clear_console()
                         print("Brazilian-Portuguese Dubbing disabled!")
                     case "6":
                         print("Changing Coop Password")
                         newPass = self.ChangeCoopPassword()
-                        self.clear_console()
+                        Utils().clear_console()
                         print(f"Coop Password changed! Now: {newPass}")
                     case "7":
                         print("Downloading and Installing Elden Ring")
-                        GamePath = DownloadAndInstallEldenRing().download_elden_ring()
+                        GamePath = GameDownloader().EldenRingDownloadOrUpdate()
                         if GamePath != None:
                             self.EldenRingGamePath = GamePath
                             Utils().updateJsonConfig('EldenRingGamePath', self.EldenRingGamePath)
-                        self.clear_console()
+                        Utils().clear_console()
                         if GamePath != None:
                             print(f'Download and Install Elden Ring completed! Path: {self.EldenRingGamePath}')
                         else:
                             print(f'Failed to download Elden Ring')
                     case "0":
                         print("Exiting...")
-                        self.clear_console()
+                        Utils().clear_console()
                         break
                     case _:
                         print("Invalid choice, choose another one")
                         time.sleep(2.5)
-                        self.clear_console()
+                        Utils().clear_console()
         except Exception as e:
-            self.clear_console()
+            Utils().clear_console()
             print(f"Error: {e}")
             self.menu()
 
