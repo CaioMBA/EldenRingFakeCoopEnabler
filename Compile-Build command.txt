@@ -1,0 +1,1 @@
+pyinstaller --onefile --icon=EldenRing.ico main.py
