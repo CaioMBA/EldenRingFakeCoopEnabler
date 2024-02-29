@@ -1,4 +1,4 @@
-import winreg, os, json, ctypes, zipfile, psutil, time
+import winreg, os, json, ctypes, zipfile, rarfile, psutil, time
 from ctypes import wintypes
 from tqdm import tqdm
 
@@ -64,11 +64,27 @@ class Utils():
         return jsonDict
 
     def DeCompress(self, fileName:str, FinalPath:str):
+        if fileName.endswith('.zip'):
+            return self.Unzip(fileName, FinalPath)
+        elif fileName.endswith('.rar'):
+            return self.Unrar(fileName, FinalPath)
+
+    def Unzip(self, fileName:str, FinalPath:str):
         with zipfile.ZipFile(fileName, 'r') as zip_ref:
             file_count = len(zip_ref.infolist())
             with tqdm(total=file_count, desc="Extracting") as pbar:
                 for file in zip_ref.infolist():
                     zip_ref.extract(file, FinalPath)
+                    pbar.update(1)
+        os.remove(fileName)
+        print(f'FILE {fileName.upper()} EXTRACTED!')
+        return FinalPath
+    def Unrar(self, fileName:str, FinalPath:str):
+        with rarfile.RarFile(fileName, 'r') as rar_ref:
+            file_count = len(rar_ref.infolist())
+            with tqdm(total=file_count, desc="Extracting") as pbar:
+                for file in rar_ref.infolist():
+                    rar_ref.extract(file, FinalPath)
                     pbar.update(1)
         os.remove(fileName)
         print(f'FILE {fileName.upper()} EXTRACTED!')

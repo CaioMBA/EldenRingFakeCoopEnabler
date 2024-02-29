@@ -1,18 +1,16 @@
-import os, shutil, time, psutil, configparser, json
+import os, shutil, time, configparser, toml
 from Services.UtilsService import Utils
-from Services.GoogleDriveService import GoogleDrive
+from Data.GoogleDriveData import GoogleDrive
 from Services.GameDownloader import GameDownloader
-from Services.OneDriveService import OneDrive
+from Data.OneDriveData import OneDrive
 class ReplaceFiles():
     def __init__(self, jsonDict:dict):
         jsonDict = Utils().FixJsonConfigValues(jsonDict)
         if jsonDict['EldenRingFixPath'] == '':
-            self.EldenRingFixPath = GoogleDrive().DownloadGoogleDriveFile('1MbN7kdGujji0rkDejIfaRD6_BcBfprb0', 'EldenRing_FIX_PIRATE_ORIGINAL.zip')
-            self.EldenRingFixPath += r'\EldenRing_FIX_PIRATE_ORIGINAL'
+            self.EldenRingFixPath = GameDownloader().DownloadOnlineFix()
             Utils().updateJsonConfig('EldenRingFixPath', self.EldenRingFixPath)
         if jsonDict['EldenRingDubPath'] == '':
-            self.EldenRingDubPath = OneDrive().DownloadFile('https://1drv.ms/u/s!Au9PHb822TTUpPAHPlMDKvZolUnDaw','EldenRingDubPT-BR.zip')
-            self.EldenRingDubPath += r'\EldenRingDubPT-BR'
+            self.EldenRingDubPath = GameDownloader().DownloadPT_BRDubbing()
             Utils().updateJsonConfig('EldenRingDubPath', self.EldenRingDubPath)
         self.EldenRingGamePath = jsonDict['EldenRingGamePath']
         self.SpaceWarGamePath = jsonDict['SpaceWarGamePath']
@@ -20,9 +18,7 @@ class ReplaceFiles():
         self.EldenRingDubPath = jsonDict['EldenRingDubPath']
         self.PirateFiles = ['dlllist.txt', 'onlinefix.ini', 'onlinefix.url', 'onlinefix64.dll', 'winmm.dll']
         self.DubArchives = {
-            'Files': ['config_armoredcore6.toml', 'config_darksouls3.toml', 'config_eldenring.toml',
-                      'launchmod_armoredcore6.bat', 'launchmod_darksouls3.bat', 'launchmod_eldenring.bat',
-                      'modengine2_launcher.exe', 'readme.txt'],
+            'Files': ['config_eldenring.toml', 'modengine2_launcher.exe'],
             'Folders': ['mod', 'modengine2', 'movie']
         }
 
@@ -182,6 +178,14 @@ class ReplaceFiles():
             config.write(iniFile)
         return config['PASSWORD']['cooppassword']
 
+    def SetModEngineToml(self):
+        tomlPath = os.path.join(self.EldenRingDubPath, 'config_eldenring.toml')
+        with open(tomlPath, 'r') as file:
+            data = toml.load(file)
+        data['modengine']['external_dlls'] = [] if not os.path.exists(os.path.join(self.EldenRingGamePath, 'SeamlessCoop')) else ['elden_ring_seamless_coop.dll']
+        with open(tomlPath, 'w') as file:
+            toml.dump(data, file)
+
     def menu(self):
         Utils().clear_console()
         try:
@@ -214,6 +218,7 @@ class ReplaceFiles():
                         print("Language changed!")
                     case "4":
                         print("Enabling Brazilian-Portuguese Dubbing")
+                        self.SetModEngineToml()
                         self.EnableDub()
                         Utils().clear_console()
                         print("Brazilian-Portuguese Dubbing enabled!")
@@ -231,7 +236,7 @@ class ReplaceFiles():
                         print("Downloading and Installing Elden Ring")
                         GamePath = GameDownloader().EldenRingDownloadOrUpdate()
                         if GamePath != None:
-                            self.EldenRingGamePath = GamePath
+                            self.EldenRingGamePath = os.path.join(GamePath,r'\Game')
                             Utils().updateJsonConfig('EldenRingGamePath', self.EldenRingGamePath)
                         Utils().clear_console()
                         if GamePath != None:
