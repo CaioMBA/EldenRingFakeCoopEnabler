@@ -7,7 +7,7 @@ class ReplaceFiles():
     def __init__(self, jsonDict:dict):
         jsonDict = Utils().FixJsonConfigValues(jsonDict)
         if jsonDict['EldenRingFixPath'] == '':
-            self.EldenRingFixPath = GoogleDrive().DownloadGoogleDriveFile('1gUqZSvDwGTloZDqVHqxNzJVBqVDEQpIt', 'EldenRing_FIX_PIRATE_ORIGINAL.zip')
+            self.EldenRingFixPath = GoogleDrive().DownloadGoogleDriveFile('1MbN7kdGujji0rkDejIfaRD6_BcBfprb0', 'EldenRing_FIX_PIRATE_ORIGINAL.zip')
             self.EldenRingFixPath += r'\EldenRing_FIX_PIRATE_ORIGINAL'
             Utils().updateJsonConfig('EldenRingFixPath', self.EldenRingFixPath)
         if jsonDict['EldenRingDubPath'] == '':

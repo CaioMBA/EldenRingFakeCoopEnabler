@@ -37,7 +37,6 @@ class Utils():
             f.write(self.TransformDictToJson(jsonDict))
         print("File appconfig.json successfully made!")
 
-
     def updateJsonConfig(self, key:str, value:str):
         with open(f'./appconfig.json', 'r+') as f:
             jsonDict = json.load(f)
