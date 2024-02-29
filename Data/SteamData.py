@@ -1,6 +1,7 @@
-import io,os,zipfile,requests, subprocess
+import io,os,zipfile,requests, subprocess, time
 from tqdm import tqdm
 from Services.UtilsService import Utils
+from Data.GoogleDriveData import GoogleDrive
 
 class Steam():
     def InstallSteamCMD(self):
@@ -37,29 +38,36 @@ class Steam():
 
         SteamCMDPath = os.path.join(os.getcwd(), "steamcmd", "steamcmd.exe")
 
-        user = "qq270606505"
-        password = "SNSD0O123456789"
-        download_path = Utils().get_steam_installation_directory()
-        if download_path is None:
-            download_path = os.path.expanduser('~'), 'Downloads'
+        CredentialArray = GoogleDrive().GetGoogleDriveSheetAsCsv('1zEglgAorcm5O_cI_-mlxDNL2i6dNrKrKbqDPlHGbzIQ')
+        for Credential in CredentialArray:
+            User = Credential['User']
+            Password = Credential['Pass']
+            download_path = Utils().get_steam_installation_directory()
+            if download_path is None:
+                download_path = os.path.expanduser('~'), 'Downloads'
 
-        download_path = os.path.join(download_path, SteamGameName)
+            download_path = os.path.join(download_path, SteamGameName)
 
 
-        cmd = [
-            SteamCMDPath,
-            "+force_install_dir", download_path,
-            "+login", user, password,
-            "+app_update", GameId, "validate", "+quit"
-        ]
+            cmd = [
+                SteamCMDPath,
+                "+force_install_dir", download_path,
+                "+login", User, Password,
+                "+app_update", GameId, "validate", "+quit"
+            ]
 
-        print('Starting download/update...')
-        try:
-            subprocess.run(cmd, check=True, shell=True)
-            return download_path
-        except subprocess.CalledProcessError as e:
-            print("Failed to download Elden Ring, error:", e)
-            return None
+            print('Trying to start download/update...')
+            try:
+                start_time = time.time()
+                subprocess.run(cmd, check=True, shell=True)
+                elapsedtime = start_time - time.time()
+                if elapsedtime < 30:
+                    pass
+                return download_path
+            except subprocess.CalledProcessError as e:
+                print("Failed to download Elden Ring, error:", e)
+                return None
+        return None
         # ANTIGO CÓDIGO PARA EXECUTAR COMO ADM
         # try:
         #     Utils().RunShellAsAdmin(SteamCMDPath, ' '.join(cmd))

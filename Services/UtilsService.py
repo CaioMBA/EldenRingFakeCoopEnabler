@@ -1,4 +1,4 @@
-import winreg, os, json, ctypes, zipfile, rarfile, psutil, time
+import winreg, os, json, ctypes, zipfile, rarfile, psutil, time, csv, io
 from ctypes import wintypes
 from tqdm import tqdm
 
@@ -121,3 +121,11 @@ class Utils():
             print(f'APP {appName} OPENED!')
         except FileNotFoundError:
             print(f"App {appName} not found! Open it manually to proceed")
+
+    def TransformCsvByteStringToDict(self, csvByteString:bytes):
+        csvfile = io.StringIO(csvByteString.decode('utf-8'))
+        reader = csv.DictReader(csvfile)
+        result = []
+        for row in reader:
+            result.append(dict(row))
+        return result

@@ -17,6 +17,7 @@ class ReplaceFiles():
         self.EldenRingFixPath = jsonDict['EldenRingFixPath']
         self.EldenRingDubPath = jsonDict['EldenRingDubPath']
         self.PirateFiles = ['dlllist.txt', 'onlinefix.ini', 'onlinefix.url', 'onlinefix64.dll', 'winmm.dll']
+        self.CoopFiles = ['elden_ring_seamless_coop.dll', 'seamlesscoopsettings.ini']
         self.DubArchives = {
             'Files': ['config_eldenring.toml', 'modengine2_launcher.exe'],
             'Folders': ['mod', 'modengine2', 'movie']
@@ -127,6 +128,7 @@ class ReplaceFiles():
                     shutil.rmtree(os.path.join(root, dirName))
         try:
             shutil.copytree(backup_path, os.path.join(self.EldenRingGamePath, 'movie'))
+            os.remove(backup_path)
         except Exception as e:
             print(f"Warning: {e}")
 
@@ -134,9 +136,19 @@ class ReplaceFiles():
         config = configparser.ConfigParser()
         filePath = os.path.join(self.EldenRingFixPath, 'OnlineFix.ini')
         config.read(filePath)
-        config['Main']['Language'] = self.ShowAvailableLanguages()
+        languageChoice = self.ShowAvailableLanguages()
+        config['Main']['Language'] = languageChoice
         with open(filePath, 'w') as iniFile:
             config.write(iniFile)
+        try:
+            config = configparser.ConfigParser()
+            filePath = os.path.join(self.EldenRingGamePath, 'OnlineFix.ini')
+            config.read(filePath)
+            config['Main']['Language'] = languageChoice
+            with open(filePath, 'w') as iniFile:
+                config.write(iniFile)
+        except Exception as e:
+            print(f"Warning, OnlineFix Not in Game folder: {e}")
 
     def ShowAvailableLanguages(self):
         Utils().clear_console()
@@ -176,7 +188,14 @@ class ReplaceFiles():
         config['PASSWORD']['cooppassword'] = str(input('Set the new password: '))
         with open(filePath, 'w') as iniFile:
             config.write(iniFile)
-        return config['PASSWORD']['cooppassword']
+        newPassword = config['PASSWORD']['cooppassword']
+        config = configparser.ConfigParser()
+        filePath = os.path.join(self.EldenRingFixPath, r'SeamlessCoop\seamlesscoopsettings.ini')
+        config.read(filePath)
+        config['PASSWORD']['cooppassword'] = newPassword
+        with open(filePath, 'w') as iniFile:
+            config.write(iniFile)
+        return newPassword
 
     def SetModEngineToml(self):
         tomlPath = os.path.join(self.EldenRingDubPath, 'config_eldenring.toml')
@@ -185,6 +204,22 @@ class ReplaceFiles():
         data['modengine']['external_dlls'] = [] if not os.path.exists(os.path.join(self.EldenRingGamePath, 'SeamlessCoop')) else ['elden_ring_seamless_coop.dll']
         with open(tomlPath, 'w') as file:
             toml.dump(data, file)
+
+    def MoveCOOPFilesToRootFolder(self):
+        for root, dirs, files in os.walk(os.path.join(self.EldenRingGamePath, 'SeamlessCoop')):
+            for fileName in files:
+                if str(fileName).lower() in self.CoopFiles:
+                    sourceFilePath = os.path.join(root,fileName)
+                    destinationFilePath = os.path.join(self.EldenRingGamePath, fileName)
+                    if os.path.exists(destinationFilePath):
+                        continue
+                    shutil.copy2(sourceFilePath, destinationFilePath)
+
+    def DeleteCOOPFilesFromRootFolder(self):
+        for root, dirs, files in os.walk(self.EldenRingGamePath):
+            for fileName in files:
+                if str(fileName).lower() in self.CoopFiles and not root.endswith('SeamlessCoop'):
+                    os.remove(os.path.join(root, fileName))
 
     def menu(self):
         Utils().clear_console()
@@ -218,12 +253,14 @@ class ReplaceFiles():
                         print("Language changed!")
                     case "4":
                         print("Enabling Brazilian-Portuguese Dubbing")
+                        self.MoveCOOPFilesToRootFolder()
                         self.SetModEngineToml()
                         self.EnableDub()
                         Utils().clear_console()
                         print("Brazilian-Portuguese Dubbing enabled!")
                     case "5":
                         print("Disabling Brazilian-Portuguese Dubbing")
+                        self.DeleteCOOPFilesFromRootFolder()
                         self.DisableDub()
                         Utils().clear_console()
                         print("Brazilian-Portuguese Dubbing disabled!")

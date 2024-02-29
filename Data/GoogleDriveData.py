@@ -27,15 +27,12 @@ class GoogleDrive():
             print(f"Failed to download. Status code: {response.status_code}")
             return ""
 
-    def GetGoogleDriveJsonDocument(self, Id: str):
-        doc_url = f'https://docs.google.com/document/d/{Id}/pub'
+    def GetGoogleDriveSheetAsCsv(self, Id: str):
+        doc_url = f'https://docs.google.com/spreadsheets/d/{Id}/export?format=csv'
 
         response = requests.get(doc_url, stream=True)
         if response.status_code == 200:
-            return Utils().TransformJsonToDict(response.text)
+            return Utils().TransformCsvByteStringToDict(response.content)
         else:
             print(f"Failed to download. Status code: {response.status_code}")
-            return {}
-
-if __name__ == '__main__':
-    print(GoogleDrive().GetGoogleDriveJsonDocument('1vy3cUs7L7AQkq8LVsvR8pMUo6u3WpKebFX3TMR6fJOw'))
+            return []
