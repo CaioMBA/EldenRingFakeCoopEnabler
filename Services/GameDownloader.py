@@ -13,6 +13,6 @@ class GameDownloader:
         return shortPath
 
     def DownloadPT_BRDubbing(self):
-        shortPath = OneDrive().DownloadFile('https://1drv.ms/u/s!Au9PHb822TTUpPAHPlMDKvZolUnDaw','EldenRingDubPT-BR.zip')
+        shortPath = OneDrive().DownloadFile('https://1drv.ms/u/s!Au9PHb822TTUpP1rGwnHbRpERa682Q','EldenRingDubPT-BR.zip')
         shortPath += r'\EldenRingDubPT-BR'
         return shortPath
