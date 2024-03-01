@@ -128,7 +128,7 @@ class ReplaceFiles():
                     shutil.rmtree(os.path.join(root, dirName))
         try:
             shutil.copytree(backup_path, os.path.join(self.EldenRingGamePath, 'movie'))
-            os.remove(backup_path)
+            shutil.rmtree(backup_path)
         except Exception as e:
             print(f"Warning: {e}")
 
