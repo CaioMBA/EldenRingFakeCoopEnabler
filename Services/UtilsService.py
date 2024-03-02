@@ -92,8 +92,8 @@ class Utils():
 
     def CheckIfOneDriveExists(self, finalDir:str):
         finalPath = os.path.join(os.path.expanduser(r'~'), finalDir)
-        if os.path.exists(os.path.expanduser(r'~\OneDrive')):
-            finalPath = os.path.join(os.path.expanduser(r'~\OneDrive'), finalDir)
+        if os.path.exists(os.path.join(os.path.expanduser(r'~'), 'OneDrive')):
+            finalPath = os.path.join(os.path.expanduser(r'~'), 'OneDrive', finalDir)
         return finalPath
 
     def TransformJsonToDict(self, jsonString:str):

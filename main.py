@@ -9,9 +9,11 @@ class ReplaceFiles():
         if jsonDict['EldenRingFixPath'] == '':
             self.EldenRingFixPath = GameDownloader().DownloadOnlineFix()
             Utils().updateJsonConfig('EldenRingFixPath', self.EldenRingFixPath)
+            print(f'EldenRingFixPath => {self.EldenRingFixPath}')
         if jsonDict['EldenRingDubPath'] == '':
             self.EldenRingDubPath = GameDownloader().DownloadPT_BRDubbing()
             Utils().updateJsonConfig('EldenRingDubPath', self.EldenRingDubPath)
+            print(f'EldenRingDubPath => {self.EldenRingDubPath}')
         self.EldenRingGamePath = jsonDict['EldenRingGamePath']
         self.SpaceWarGamePath = jsonDict['SpaceWarGamePath']
         self.EldenRingFixPath = jsonDict['EldenRingFixPath']
