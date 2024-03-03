@@ -203,7 +203,10 @@ class ReplaceFiles():
         tomlPath = os.path.join(self.EldenRingDubPath, 'config_eldenring.toml')
         with open(tomlPath, 'r') as file:
             data = toml.load(file)
-        data['modengine']['external_dlls'] = [] if not os.path.exists(os.path.join(self.EldenRingGamePath, 'SeamlessCoop')) else ['elden_ring_seamless_coop.dll']
+        if os.path.exists(os.path.join(self.EldenRingGamePath, 'SeamlessCoop')) and not os.path.exists(os.path.join(self.EldenRingGamePath, 'winmm.dll')):
+            data['modengine']['external_dlls'] = ['elden_ring_seamless_coop.dll']
+        else:
+            data['modengine']['external_dlls'] = []
         with open(tomlPath, 'w') as file:
             toml.dump(data, file)
 
