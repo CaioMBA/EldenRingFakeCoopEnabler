@@ -94,6 +94,8 @@ class Utils():
         finalPath = os.path.join(os.path.expanduser(r'~'), finalDir)
         if os.path.exists(os.path.join(os.path.expanduser(r'~'), 'OneDrive')):
             finalPath = os.path.join(os.path.expanduser(r'~'), 'OneDrive', finalDir)
+        if not os.path.exists(finalPath):
+            finalPath = os.path.join(os.path.expanduser(r'~'), 'Downloads')
         return finalPath
 
     def TransformJsonToDict(self, jsonString:str):
