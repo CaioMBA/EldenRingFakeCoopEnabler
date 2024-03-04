@@ -278,8 +278,9 @@ class ReplaceFiles():
                         print("Downloading and Installing Elden Ring")
                         GamePath = GameDownloader().EldenRingDownloadOrUpdate()
                         if GamePath != None:
-                            self.EldenRingGamePath = os.path.join(GamePath,r'\Game')
+                            self.EldenRingGamePath = GamePath + r'\Game'
                             Utils().updateJsonConfig('EldenRingGamePath', self.EldenRingGamePath)
+                        time.sleep(2.5)
                         Utils().clear_console()
                         if GamePath != None:
                             print(f'Download and Install Elden Ring completed! Path: {self.EldenRingGamePath}')
