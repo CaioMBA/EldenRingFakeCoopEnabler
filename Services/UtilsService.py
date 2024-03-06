@@ -14,6 +14,7 @@ class Utils():
         try:
             key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Valve\Steam")
             steam_install_dir = winreg.QueryValueEx(key, "SteamPath")[0]
+            steam_install_dir = steam_install_dir.replace('/', '\\')
 
             return os.path.join(steam_install_dir, "steamapps", "common")
         except FileNotFoundError:
@@ -37,13 +38,17 @@ class Utils():
             f.write(self.TransformDictToJson(jsonDict))
         print("File appconfig.json successfully made!")
 
-    def updateJsonConfig(self, key:str, value:str):
+    def updateJsonConfig(self, key: str, subkey: str, value: str):
         with open(f'./appconfig.json', 'r+') as f:
             jsonDict = json.load(f)
-            jsonDict[key] = value
+            if subkey is not None or subkey != '':
+                jsonDict[key][subkey] = value
+            else:
+                jsonDict[key] = value
             f.seek(0)
             f.truncate()
             json.dump(jsonDict, f, indent=4)
+
 
     def ReadJsonConfig(self):
         with open('appconfig.json', 'r') as f:
@@ -112,6 +117,7 @@ class Utils():
             os.system('cls')
 
     def CheckIfAppIsRunning(self, appName:str):
+        print(f'Checking if {appName} is running...')
         for process in psutil.process_iter(['pid', 'name']):
             if appName in process.name():
                 time.sleep(5)

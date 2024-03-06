@@ -1,6 +1,11 @@
 {
-    "EldenRingGamePath": "",
-    "EldenRingFixPath": "",
-    "EldenRingDubPath": "",
-    "SpaceWarGamePath": ""
+    "ELDEN RING": {
+        "GamePath": "",
+        "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\EldenRing_FIX_PIRATE_ORIGINAL",
+        "ModsPath": "",
+        "EnginePath": "C:\\Users\\caiom\\OneDrive\\DocumentsModEngine-2.1.0.0-win64ModEngine-2.1.0.0-win64"
+    },
+    "Spacewar": {
+        "GamePath": "c:\\program files (x86)\\steam\\steamapps\\common\\Spacewar"
+    }
 }
