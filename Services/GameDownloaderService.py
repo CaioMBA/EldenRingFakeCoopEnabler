@@ -6,8 +6,8 @@ from Data.OneDriveData import OneDrive
 from Data.GitHubData import GitHub
 from Services.UtilsService import Utils
 class GameDownloader:
-    def EldenRingDownloadOrUpdate(self):
-        return Steam().RunSteamCMDUpdateFunction("1245620", "ELDEN RING", '')
+    def EldenRingDownloadOrUpdate(self, DownloadPath: str=''):
+        return Steam().RunSteamCMDUpdateFunction("1245620", "ELDEN RING", DownloadPath)
     def SpaceWarDownloadOrUpdate(self):
         return Steam().RunSteamCMDUpdateFunction("480", "Spacewar", '')
 

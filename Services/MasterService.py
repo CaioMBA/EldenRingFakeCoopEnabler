@@ -1,5 +1,5 @@
 import time
-from Services.EldenRingService import EldenRing
+from Services.EldenRing.EldenRingService import EldenRing
 from Services.SpaceWarService import SpaceWar
 from Services.UtilsService import Utils
 from Services.GameDownloaderService import GameDownloader

@@ -1,8 +1,7 @@
-import os, shutil, time, configparser, toml
+import os, shutil, time, configparser
 from Services.UtilsService import Utils
-from Data.GoogleDriveData import GoogleDrive
 from Services.GameDownloaderService import GameDownloader
-from Data.OneDriveData import OneDrive
+from Services.EldenRing.ModsService import Mods
 class EldenRing():
     def __init__(self, jsonDict:dict):
         if jsonDict['GamePath'] == '' or jsonDict['GamePath'] is None:
@@ -12,14 +11,19 @@ class EldenRing():
         jsonDict = Utils().FixJsonConfigValues(jsonDict)
         self.EldenRingGamePath = jsonDict['GamePath']
         self.EldenRingFixPath = jsonDict['FixPath']
-        self.EldenRingDubPath = jsonDict['ModsPath']
-        self.EldenRingDubPath = jsonDict['EnginePath']
+        self.EldenRingMods = Mods(jsonDict['ModsPath'],jsonDict['GamePath'])
+        self.EldenRingModEnginePath = jsonDict['EnginePath']
         self.PirateFiles = ['dlllist.txt', 'onlinefix.ini', 'onlinefix.url', 'onlinefix64.dll', 'winmm.dll']
         self.DubArchives = {
             'Files': ['config_eldenring.toml', 'modengine2_launcher.exe'],
             'Folders': ['mod', 'modengine2', 'movie']
         }
-
+    def CheckIfPirateGameIsEnabled(self):
+        for root, dirs, files in os.walk(self.EldenRingGamePath):
+            for fileName in files:
+                if str(fileName).lower() in self.PirateFiles and not root.endswith('SeamlessCoop') and str(fileName).lower() != 'launch_elden_ring_seamlesscoop.exe':
+                    return True
+        return False
     def EnablePirateGame(self):
         print("Enabling play with Pirate Game")
         if self.EldenRingFixPath == '' or not os.path.exists(self.EldenRingFixPath):
@@ -48,48 +52,8 @@ class EldenRing():
 
         except Exception as e:
             print(f"Error: {e}")
-
-    def EnableDub(self):
-        if self.EldenRingDubPath == '' or not os.path.exists(self.EldenRingDubPath):
-            print(f"The path '{self.EldenRingDubPath}' does not exist.")
-            return
-
-        self.BackUpMovieFolder()
-
-        try:
-            for root, dirs, files in os.walk(self.EldenRingDubPath):
-
-                relative_path = os.path.relpath(root, self.EldenRingDubPath)
-                destination_root = os.path.join(self.EldenRingGamePath, relative_path)
-
-                os.makedirs(destination_root, exist_ok=True)
-
-                for fileName in files:
-                    sourceFilePath = os.path.join(root, fileName)
-                    destinationFilePath = os.path.join(destination_root, fileName)
-
-                    if os.path.exists(destinationFilePath):
-                        if os.path.isdir(destinationFilePath):
-                            shutil.rmtree(destinationFilePath)
-                        else:
-                            os.remove(destinationFilePath)
-
-                    shutil.copy2(sourceFilePath, destinationFilePath)
-
-        except Exception as e:
-            print(f"Error: {e}")
-
-    def BackUpMovieFolder(self):
-        backup_name = 'movie_backup'
-        backup_path = os.path.join(self.EldenRingGamePath, backup_name)
-        try:
-            shutil.copytree(os.path.join(self.EldenRingGamePath, 'movie'), backup_path)
-            print(f'Backup successful. Folder "movie" backed up to "{backup_path}".')
-        except Exception as e:
-            print(f"Error: {e}")
-
     def DisablePirateGame(self):
-        print("Disable play with Pirate Game")
+        print("Disabling play with Pirate Game")
         for root, dirs, files in os.walk(self.EldenRingGamePath):
             for fileName in files:
                 if str(fileName).lower() in self.PirateFiles:
@@ -99,23 +63,6 @@ class EldenRing():
                     shutil.rmtree(os.path.join(root,dirName))
         Utils().clear_console()
         print("Pirate Game CO-OP disabled!")
-
-    def DisableDub(self):
-        backup_path = os.path.join(self.EldenRingGamePath, 'movie_backup')
-        for root, dirs, files in os.walk(self.EldenRingGamePath):
-            for fileName in files:
-                if str(fileName).lower() in self.DubArchives['Files']:
-                    os.remove(os.path.join(root,fileName))
-            for dirName in dirs:
-                if str(dirName).lower() in self.DubArchives['Folders']:
-                    if not os.path.exists(backup_path) and dirName == 'movie':
-                        continue
-                    shutil.rmtree(os.path.join(root, dirName))
-        try:
-            shutil.copytree(backup_path, os.path.join(self.EldenRingGamePath, 'movie'))
-            shutil.rmtree(backup_path)
-        except Exception as e:
-            print(f"Warning: {e}")
 
     def ChangeLanguage(self):
         ChangingPaths = [self.EldenRingFixPath, self.EldenRingGamePath]
@@ -131,24 +78,6 @@ class EldenRing():
                 with open(filePath, 'w') as iniFile:
                     config.write(iniFile)
                 print(f'Language changed in {filePath}')
-            except Exception as e:
-                print(f"Warning: {e}")
-
-    def ChangeCoopPassword(self):
-        ChangingPaths = [self.EldenRingGamePath, self.EldenRingFixPath]
-        newPassword = ''
-        for path in ChangingPaths:
-            try:
-                config = configparser.ConfigParser()
-                filePath = os.path.join(path, r'SeamlessCoop\seamlesscoopsettings.ini')
-                config.read(filePath)
-                print(f'Current Password: {config['PASSWORD']['cooppassword']}')
-                if newPassword == '':
-                    newPassword = str(input('Set the new password: '))
-                config['PASSWORD']['cooppassword'] = newPassword
-                with open(filePath, 'w') as iniFile:
-                    config.write(iniFile)
-                print(f'Password changed in {filePath}')
             except Exception as e:
                 print(f"Warning: {e}")
     def ShowAvailableLanguages(self):
@@ -181,33 +110,35 @@ class EldenRing():
             Utils().clear_console()
             print("Invalid choice, choose another one")
 
-    def SetModEngineToml(self):
-        tomlPath = os.path.join(self.EldenRingDubPath, 'config_eldenring.toml')
-        with open(tomlPath, 'r') as file:
-            data = toml.load(file)
-        if os.path.exists(os.path.join(self.EldenRingGamePath, 'SeamlessCoop')) and not os.path.exists(os.path.join(self.EldenRingGamePath, 'winmm.dll')):
-            data['modengine']['external_dlls'] = [r'SeamlessCoop\elden_ring_seamless_coop.dll']
-        else:
-            data['modengine']['external_dlls'] = []
-        with open(tomlPath, 'w') as file:
-            toml.dump(data, file)
+    def ChangeCoopPassword(self):
+        ChangingPaths = [self.EldenRingGamePath, self.EldenRingFixPath]
+        newPassword = ''
+        for path in ChangingPaths:
+            try:
+                config = configparser.ConfigParser()
+                filePath = os.path.join(path, r'SeamlessCoop\seamlesscoopsettings.ini')
+                config.read(filePath)
+                print(f'Current Password: {config['PASSWORD']['cooppassword']}')
+                if newPassword == '':
+                    newPassword = str(input('Set the new password: '))
+                config['PASSWORD']['cooppassword'] = newPassword
+                with open(filePath, 'w') as iniFile:
+                    config.write(iniFile)
+                print(f'Password changed in {filePath}')
+            except Exception as e:
+                print(f"Warning: {e}")
+        return newPassword
 
-    def CheckIfPirateGameIsEnabled(self):
-        for root, dirs, files in os.walk(self.EldenRingGamePath):
-            for fileName in files:
-                if str(fileName).lower() in self.PirateFiles and not root.endswith('SeamlessCoop'):
-                    return True
-        return False
+
     def menu(self):
         Utils().clear_console()
         try:
             while True:
-                print(f"1. {'Disable' if self.CheckIfPirateGameIsEnabled() else 'Enable'} play Pirate Game")
-                print("3. Change Text/Subtitle Game Language")
-                print("4. Enable Brazilian-Portuguese Dubbing")
-                print("5. Disable Brazilian-Portuguese Dubbing")
-                print("6. Change Coop Password")
-                print("7. Download-Install/Update Elden Ring")
+                print(f"1. {'DISABLE' if self.CheckIfPirateGameIsEnabled() else 'ENABLE'} play pirate game")
+                print("2. Change TEXT/SUBTITLE pirate game LANGUAGE")
+                print(f"3. {'DISABLE' if self.EldenRingMods.CheckIfDubIsEnabled() else 'ENABLE'} brazilian-portuguese dubbing")
+                print("4. Change co-op password")
+                print("5. Download-Install|Update Elden Ring")
                 print("0. Exit")
                 choice = input("Enter choice: ")
                 match choice:
@@ -216,33 +147,28 @@ class EldenRing():
                             self.DisablePirateGame()
                         else:
                             self.EnablePirateGame()
-                    case "3":
+                    case "2":
                         print("Changing Language")
                         self.ChangeLanguage()
                         Utils().clear_console()
                         print("Language changed!")
+                    case "3":
+                        if self.EldenRingMods.CheckIfDubIsEnabled():
+                            self.EldenRingMods.DisableDub()
+                        else:
+                            self.EldenRingMods.SetModEngineToml()
+                            self.EldenRingMods.EnableDub()
                     case "4":
-                        print("Enabling Brazilian-Portuguese Dubbing")
-                        self.SetModEngineToml()
-                        self.EnableDub()
-                        Utils().clear_console()
-                        print("Brazilian-Portuguese Dubbing enabled!")
-                    case "5":
-                        print("Disabling Brazilian-Portuguese Dubbing")
-                        self.DisableDub()
-                        Utils().clear_console()
-                        print("Brazilian-Portuguese Dubbing disabled!")
-                    case "6":
                         print("Changing Coop Password")
                         newPass = self.ChangeCoopPassword()
                         Utils().clear_console()
                         print(f"Coop Password changed! Now: {newPass}")
-                    case "7":
+                    case "5":
                         print("Downloading and Installing Elden Ring")
-                        GamePath = GameDownloader().EldenRingDownloadOrUpdate()
+                        GamePath = GameDownloader().EldenRingDownloadOrUpdate(self.EldenRingGamePath.replace(r'\Game', ''))
                         if GamePath != None:
                             self.EldenRingGamePath = GamePath + r'\Game'
-                            Utils().updateJsonConfig('EldenRingGamePath', self.EldenRingGamePath)
+                            Utils().updateJsonConfig('EldenRingGamePath', 'GamePath', self.EldenRingGamePath)
                         time.sleep(2.5)
                         Utils().clear_console()
                         if GamePath != None:
@@ -250,7 +176,7 @@ class EldenRing():
                         else:
                             print(f'Failed to download Elden Ring')
                     case "0":
-                        print("Exiting...")
+                        print("Exiting Elden Ring Menu...")
                         Utils().clear_console()
                         break
                     case _:
