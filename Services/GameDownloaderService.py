@@ -21,12 +21,12 @@ class GameDownloader:
             if jsonDict[linkObj['Game']][linkObj['JsonSubKey']] != '':
                 continue
             if linkObj['Origin'] == 'GitHub':
-                shortPath = GitHub().DownloadAsset(linkObj['Links'], linkObj['ID'])
+                shortPath = GitHub().DownloadAsset(linkObj['Links'], linkObj['fileName'])
                 shortPath += linkObj['FinalDir']
             elif linkObj['Origin'] == 'GoogleDrive':
-                shortPath = GoogleDrive().DownloadGoogleDriveFile(linkObj['Links'], linkObj['ID'])
+                shortPath = GoogleDrive().DownloadGoogleDriveFile(linkObj['Links'], linkObj['fileName'])
             elif linkObj['Origin'] == 'OneDrive':
-                shortPath = OneDrive().DownloadFile(linkObj['Links'], linkObj['ID'])
-            shortPath = str(os.path.join(shortPath, linkObj['FinalDir']))
+                shortPath = OneDrive().DownloadFile(linkObj['Links'], linkObj['fileName'])
+            shortPath = str(os.path.join(shortPath, linkObj['insideFile']))
             Utils().updateJsonConfig(key=linkObj['Game'], subkey=linkObj['JsonSubKey'], value=shortPath)
             print(f'[{linkObj["Game"]} <-> {linkObj["JsonSubKey"]}] -> {shortPath}')

@@ -14,6 +14,7 @@ class Master():
         try:
             while True:
                 print('[ MASTER MENU ]')
+                print('Choose a game to manage:')
                 print('[1] -> ELDEN RING')
                 print('[0] -> Quit | Exit')
                 option = input('Choose an option(Left Number): ')
