@@ -98,9 +98,12 @@ class Mods():
             self.RestoreMovieFolder()
         print(f"{modName} disabled!")
     def BackUpMovieFolder(self):
+        print('Backing up movie folder...')
         if not os.path.exists(os.path.join(self.EldenRingGamePath, 'movie_backup')):
-            os.rename(os.path.join(self.EldenRingGamePath, 'movie'),
-                      os.path.join(self.EldenRingGamePath, 'movie_backup'))
+            # os.rename(os.path.join(self.EldenRingGamePath, 'movie'),
+            #           os.path.join(self.EldenRingGamePath, 'movie_backup'))
+            shutil.copytree(os.path.join(self.EldenRingGamePath, 'movie'),
+                            os.path.join(self.EldenRingGamePath, 'movie_backup'))
     def RestoreMovieFolder(self):
         if os.path.exists(os.path.join(self.EldenRingGamePath, 'movie_backup')):
             if os.path.exists(os.path.join(self.EldenRingGamePath, 'movie')):
@@ -167,12 +170,16 @@ class Mods():
             self.SetModEngineToml()
             self.SetModLoaderOrderIni()
             if (len(self.EnabledEngineMods) == 0 and len(self.ModLoaderOrder) == 0
-                    and self.CheckIfModIsEnabled(self.ModsArchives['EldenRing_ModEngine'])):
+                    and self.CheckIfModIsEnabled(self.ModsArchives['EldenRing_ModEngine'])
+                    and not os.path.exists(os.path.join(self.EldenRingGamePath, 'mod', 'sd'))):
                 self.DisableMod(self.EldenRingEnginePath, self.ModsArchives['EldenRing_ModEngine'])
         else:
             self.MoveModFilesToEldenRingMod(ModPath)
             self.SetModEngineToml()
             if (len(self.EnabledEngineMods) > 0 or len(self.ModLoaderOrder) > 0):
+                if not os.path.exists(os.path.join(self.EldenRingGamePath, 'modengine2_launcher.exe')):
+                    self.GetModEngine()
+            elif len(self.EnabledEngineMods) == 0 and len(self.ModLoaderOrder) == 0 and ModPath == self.EldenRingDubPath:
                 if not os.path.exists(os.path.join(self.EldenRingGamePath, 'modengine2_launcher.exe')):
                     self.GetModEngine()
             self.SetModLoaderOrderIni()
