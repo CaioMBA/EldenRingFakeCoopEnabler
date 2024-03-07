@@ -42,6 +42,10 @@ class Mods():
                 'Files': ['UltrawideFix.dll'],
                 'Folders': ['UltrawideFix']
             },
+            'EldenRing_DisableSharpenFilter': {
+                'Files': ['DisableSharpenFilter.dll'],
+                'Folders': []
+            },
             'EldenRing_RemoveChromaticAberration': {
                 'Files': ['RemoveChromaticAberration.dll'],
                 'Folders': []
@@ -112,9 +116,11 @@ class Mods():
                 with open(tomlPath, 'r') as file:
                     data = toml.load(file)
 
-                if (os.path.exists(os.path.join(path, 'winmm.dll'))
-                        and r'SeamlessCoop\elden_ring_seamless_coop.dll' in self.EnabledEngineMods):
-                    self.EnabledEngineMods.pop(self.EnabledEngineMods.index(r'SeamlessCoop\elden_ring_seamless_coop.dll'))
+                #THIS IS NOT NECESSARY ANYMORE
+                # if (os.path.exists(os.path.join(path, 'winmm.dll'))
+                #         and r'SeamlessCoop\elden_ring_seamless_coop.dll' in self.EnabledEngineMods):
+                #     self.EnabledEngineMods.pop(self.EnabledEngineMods.index(r'SeamlessCoop\elden_ring_seamless_coop.dll'))
+
                 data['modengine']['external_dlls'] = self.EnabledEngineMods
                 with open(tomlPath, 'w') as file:
                     toml.dump(data, file)
@@ -195,6 +201,13 @@ class Mods():
                                 self.ModLoaderOrder.append('RemoveVignette.dll')
                             case 'EldenRing_FSR3':
                                 self.ModLoaderOrder.append('EldenRingUpscaler.dll')
+                            case 'EldenRing_DisableSharpenFilter':
+                                self.ModLoaderOrder.append('DisableSharpenFilter.dll')
+                            case 'EldenRing_RemoveBlackBars':
+                                self.ModLoaderOrder.append('UltrawideFix.dll')
+                            case 'EldenRing_IncreaseAnimationDistance':
+                                self.ModLoaderOrder.append('IncreaseAnimationDistance.dll')
+
 
     def ChangeCoopPassword(self):
         ChangingPaths = [self.EldenRingGamePath, self.EldenRingCoopPath]
@@ -204,8 +217,8 @@ class Mods():
                 config = configparser.ConfigParser()
                 filePath = os.path.join(path, r'SeamlessCoop\seamlesscoopsettings.ini')
                 config.read(filePath)
-                print(f'Current Password: {config['PASSWORD']['cooppassword']}')
                 if newPassword == '':
+                    print(f'Current Password: {config['PASSWORD']['cooppassword']}')
                     newPassword = str(input('Set the new password: '))
                 config['PASSWORD']['cooppassword'] = newPassword
                 with open(filePath, 'w') as iniFile:
@@ -241,16 +254,25 @@ class Mods():
         except Exception as e:
             print(f"Error: {e}")
 
+    def ReturningEnableDisable(self, modArchives: dict):
+        if self.CheckIfModIsEnabled(modArchives):
+            return 'DISABLE'
+        else:
+            return 'ENABLE'
+
     def menu(self):
         try:
             while True:
                 print('[ ELDEN RING MODS MENU ]')
-                print(f'1. {'DISABLE' if self.CheckIfModIsEnabled(self.ModsArchives['EldenRing_CO-OP']) else 'ENABLE'} SEAMLESS CO-OP')
-                print(f'2. {'DISABLE' if self.CheckIfModIsEnabled(self.ModsArchives['EldenRing_DubPT-BR']) else 'ENABLE'} BRAZILIAN-PORTUGUESE DUB')
-                print(f'3. {'DISABLE' if self.CheckIfModIsEnabled(self.ModsArchives['EldenRing_UnlockFPS']) else 'ENABLE'} UNLOCK FPS')
-                print(f'4. {'DISABLE' if self.CheckIfModIsEnabled(self.ModsArchives['EldenRing_RemoveChromaticAberration']) else 'ENABLE'} REMOVE CHROMATIC ABERRATION')
-                print(f'5. {'DISABLE' if self.CheckIfModIsEnabled(self.ModsArchives['EldenRing_RemoveVignette']) else 'ENABLE'} REMOVE VIGNETTE')
-                print(f'6. {'DISABLE' if self.CheckIfModIsEnabled(self.ModsArchives['EldenRing_FSR3']) else 'ENABLE'} FSR3')
+                print(f'1. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_CO-OP'])} SEAMLESS CO-OP')
+                print(f'2. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_DubPT-BR'])} BRAZILIAN-PORTUGUESE DUB')
+                print(f'3. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_UnlockFPS'])} UNLOCK FPS')
+                print(f'4. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveChromaticAberration'])} REMOVE CHROMATIC ABERRATION')
+                print(f'5. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveVignette'])} REMOVE VIGNETTE')
+                print(f'6. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_FSR3'])} FSR3')
+                print(f'7. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_DisableSharpenFilter'])} DISABLE SHARPEN FILTER')
+                print(f'8. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveBlackBars'])} REMOVE BLACK BARS')
+                print(f'9. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_IncreaseAnimationDistance'])} INCREASE ANIMATION DISTANCE')
                 print('0. EXIT MODS MENU')
                 choice = str(input('Enter your choice: '))
                 match choice:
@@ -266,6 +288,12 @@ class Mods():
                         self.ChooseExecution(self.ModsArchives['EldenRing_RemoveVignette'], self.EldenRingRemoveVignette)
                     case '6':
                         self.ChooseExecution(self.ModsArchives['EldenRing_FSR3'], self.EldenRingFSR3)
+                    case '7':
+                        self.ChooseExecution(self.ModsArchives['EldenRing_DisableSharpenFilter'], self.EldenRingDisableSharpenFilter)
+                    case '8':
+                        self.ChooseExecution(self.ModsArchives['EldenRing_RemoveBlackBars'], self.EldenRingRemoveBlackBars)
+                    case '9':
+                        self.ChooseExecution(self.ModsArchives['EldenRing_IncreaseAnimationDistance'], self.EldenRingIncreaseAnimationDistance)
                     case '0':
                         print("Exiting Mods Menu...")
                         Utils().clear_console()

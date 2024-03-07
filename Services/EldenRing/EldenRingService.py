@@ -71,6 +71,7 @@ class EldenRing():
                 filePath = os.path.join(path, 'OnlineFix.ini')
                 config.read(filePath)
                 if languageChoice == '':
+                    print(f'Current Language: {config['Main']['Language']}')
                     languageChoice = self.ShowAvailableLanguages()
                 config['Main']['Language'] = languageChoice
                 with open(filePath, 'w') as iniFile:
@@ -78,6 +79,7 @@ class EldenRing():
                 print(f'Language changed in {filePath}')
             except Exception as e:
                 print(f"Warning: {e}")
+        return languageChoice
     def ShowAvailableLanguages(self):
         Utils().clear_console()
         LanguageDict = {
@@ -131,9 +133,9 @@ class EldenRing():
                             self.EnablePirateGame()
                     case "2":
                         print("Changing Language")
-                        self.ChangeLanguage()
+                        newLang = self.ChangeLanguage()
                         Utils().clear_console()
-                        print("Language changed!")
+                        print(f"Language changed! Now: {newLang}")
                     case "3":
                         Utils().clear_console()
                         self.EldenRingMods.menu()
