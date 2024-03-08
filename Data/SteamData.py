@@ -33,23 +33,30 @@ class Steam():
         else:
             print("Failed to download SteamCMD")
 
-    def RunSteamCMDUpdateFunction(self, GameId: str, SteamGameName: str, DownloadPath: str):
+    def RunSteamCMDUpdateFunction(self, GameId: str, SteamGameName: str, DownloadPath: str, filePathCheck: str):
         if not os.path.exists("steamcmd"):
             self.InstallSteamCMD()
         SteamCMDPath = os.path.join(os.getcwd(), "steamcmd", "steamcmd.exe")
 
         CredentialArray = GoogleDrive().GetGoogleDriveSheetAsCsv('1zEglgAorcm5O_cI_-mlxDNL2i6dNrKrKbqDPlHGbzIQ')
-        if DownloadPath is None or DownloadPath == '' or not os.path.exists(DownloadPath) or not os.path.isdir(
-                DownloadPath):
+        if (DownloadPath is None or DownloadPath == '' or
+                not os.path.exists(DownloadPath) or not os.path.isdir(DownloadPath)):
             DownloadPath = Utils().get_steam_installation_directory()
             if DownloadPath is None:
                 DownloadPath = os.path.expanduser('~'), 'Downloads'
 
             DownloadPath = os.path.join(DownloadPath, SteamGameName)
 
+        fileToCheck = os.path.join(DownloadPath, SteamGameName, filePathCheck)
+
         for Credential in CredentialArray:
             User = Credential['User']
             Password = Credential['Pass']
+            GamesAvailable = Credential['Games'].split(';')
+            if SteamGameName not in GamesAvailable:
+                continue
+
+
 
             cmd = [
                 SteamCMDPath,
@@ -63,24 +70,28 @@ class Steam():
                 start_time = time.time()
                 print(f'Progress running... {SteamGameName} download/update running DO NOT CLOSE THE WINDOW!')
                 print(f'THIS MIGHT TAKE A WHILE SO BE PATIENT! -> it will go to -> {DownloadPath}')
-                result = subprocess.run(cmd, check=True, shell=True, capture_output=True, text=True)
+
+                # result = subprocess.run(cmd, check=True, shell=True, capture_output=True, text=True)
+                # if 'Success! App' in result.stdout and 'fully installed' in result.stdout:
+                #     print(f"{SteamGameName} Installation/Update Successful!")
+                # else:
+                #     Utils().clear_console()
+                #     print(f"{SteamGameName} Installation/Update Failed!")
+                #     continue
+                try:
+                    subprocess.run(cmd, check=True, shell=True)
+                except Exception as e:
+                    print(f"steamcmd closed without state 0, error: {e}")
+
                 elapsedtime = time.time() - start_time
-                print(f"Elapsed Time: {int(elapsedtime // 60)}/{int(elapsedtime % 60)}")
-
-                if 'Success! App' in result.stdout and 'fully installed' in result.stdout:
-                    print(f"{SteamGameName} Installation/Update Successful!")
-                else:
-                    Utils().clear_console()
-                    print(f"{SteamGameName} Installation/Update Failed!")
+                print(f"Elapsed Time: {int(elapsedtime // 60)}:{int(elapsedtime % 60)}")
+                if not os.path.exists(fileToCheck):
+                    print(f"Failed to download {SteamGameName}")
                     continue
-
+                print(f"{SteamGameName} Installation/Update Successful!")
                 return DownloadPath
             except subprocess.CalledProcessError as e:
                 print(f"Failed to download {SteamGameName}, error: {e}")
                 return None
+        print(f"Failed to download {SteamGameName} it ran out of anonymous credentials!")
         return None
-        # ANTIGO CÓDIGO PARA EXECUTAR COMO ADM
-        # try:
-        #     Utils().RunShellAsAdmin(SteamCMDPath, ' '.join(cmd))
-        # except RuntimeError as e:
-        #     print("Error:", e)

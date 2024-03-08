@@ -7,9 +7,15 @@ from Data.GitHubData import GitHub
 from Services.UtilsService import Utils
 class GameDownloader:
     def EldenRingDownloadOrUpdate(self, DownloadPath: str=''):
-        return Steam().RunSteamCMDUpdateFunction("1245620", "ELDEN RING", DownloadPath)
+        return Steam().RunSteamCMDUpdateFunction("1245620",
+                                                 "ELDEN RING",
+                                                 DownloadPath,
+                                                 r'Game\eldenring.exe')
     def SpaceWarDownloadOrUpdate(self):
-        return Steam().RunSteamCMDUpdateFunction("480", "Spacewar", '')
+        return Steam().RunSteamCMDUpdateFunction("480",
+                                                 "Spacewar",
+                                                 '',
+                                                 'SteamworksExample.exe')
 
     def DownloadLinks(self, jsonDict:dict):
         Links = GoogleDrive().GetGoogleDriveSheetAsCsv('1gOa-GoZt4C5oUtMIHTqyBtxt4CMTK3Y6Qqr5sjrEWek')
