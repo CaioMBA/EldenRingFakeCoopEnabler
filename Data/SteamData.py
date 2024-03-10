@@ -47,7 +47,7 @@ class Steam():
 
             DownloadPath = os.path.join(DownloadPath, SteamGameName)
 
-        fileToCheck = os.path.join(DownloadPath, SteamGameName, filePathCheck)
+        fileToCheck = os.path.join(DownloadPath, filePathCheck)
 
         for Credential in CredentialArray:
             User = Credential['User']
@@ -88,6 +88,9 @@ class Steam():
                 if not os.path.exists(fileToCheck):
                     print(f"Failed to download {SteamGameName}")
                     continue
+                os.rename(DownloadPath.replace(SteamGameName, SteamGameName.lower()), DownloadPath)
+                Utils().DeleteSpecificDir(os.path.join(DownloadPath, 'steamapps'))
+                Utils().DeleteSpecificDir(os.path.join(DownloadPath, '_CommonRedist'))
                 print(f"{SteamGameName} Installation/Update Successful!")
                 return DownloadPath
             except subprocess.CalledProcessError as e:

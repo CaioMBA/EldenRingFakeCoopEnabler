@@ -1,3 +1,4 @@
+import shutil
 import winreg, os, json, ctypes, zipfile, rarfile, psutil, time, csv, io
 from ctypes import wintypes
 from tqdm import tqdm
@@ -26,14 +27,19 @@ class Utils():
     def CreateJsonConfig(self):
         with open(f'./appconfig.json', 'w') as f:
             jsonDict = {
-                "EldenRingGamePath": input("SET ELDEN RING GAME PATH (Ex: "
+                {
+                    "ELDEN RING": {
+                        "GamePath": input("SET ELDEN RING GAME PATH (Ex: "
                                            r"%programfiles(x86)%\Steam\steamapps\common\ELDEN RING\Game): "),
-                "EldenRingFixPath": input(
-                    "SET ELDEN RING FIX PATH (IF YOU DON'T HAVE IT PRESS [ ENTER ]): "),
-                "EldenRingDubPath": input(
-                    "SET ELDEN RING DUB PATH (IF YOU DON'T HAVE IT PRESS [ ENTER ]): "),
-                "SpaceWarGamePath": input("SET SPACE WAR GAME PATH (Ex: "
+                        "FixPath": input("SET ELDEN RING FIX PATH (IF YOU DON'T HAVE IT PRESS [ ENTER ]): "),
+                        "EnginePath": input("SET ELDEN RING ENGINE PATH (IF YOU DON'T HAVE IT PRESS [ ENTER ]): "),
+                        "ModsPath": input("SET ELDEN RING MODS PATH (IF YOU DON'T HAVE IT PRESS [ ENTER ]): ")
+                    },
+                    "Spacewar":{
+                        "GamePath": input("SET SPACE WAR GAME PATH (Ex: "
                                           r"%programfiles(x86)%\Steam\steamapps\common\SpaceWar): ")
+                    }
+                }
             }
             f.write(self.TransformDictToJson(jsonDict))
         print("File appconfig.json successfully made!")
@@ -48,7 +54,6 @@ class Utils():
             f.seek(0)
             f.truncate()
             json.dump(jsonDict, f, indent=4)
-
 
     def ReadJsonConfig(self):
         with open('appconfig.json', 'r') as f:
@@ -121,7 +126,9 @@ class Utils():
         for process in psutil.process_iter(['pid', 'name']):
             if appName in process.name():
                 time.sleep(5)
+                print(f'{appName} is running!')
                 return True
+        print(f'{appName} is not running!')
         return False
 
     def TryOpenApp(self, appName:str, appPath:str):
@@ -138,3 +145,6 @@ class Utils():
         for row in reader:
             result.append(dict(row))
         return result
+
+    def DeleteSpecificDir(self, path:str):
+        shutil.rmtree(path, ignore_errors=True)
