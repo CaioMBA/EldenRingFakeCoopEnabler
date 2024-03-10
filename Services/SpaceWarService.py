@@ -5,15 +5,14 @@ import os, time
 
 class SpaceWar():
     def __init__(self):
-        if not Utils().CheckIfAppIsRunning('steam.exe'):
-            os.system('start steam://open/steam')
-
-    def InstallSpaceWar(self):
         while True:
             if Utils().CheckIfAppIsRunning('steam.exe'):
-                print('Steam aberta! com sucesso')
+                time.sleep(1)
                 break
+            os.system('start steam://open/steam')
+            time.sleep(2)
+
+    def InstallSpaceWar(self):
         print('DOWNLOADING|INSTALLING SPACE WAR SO ELDEN RING WORKS!')
         print('SETUP CONTROLLER TEMPLATE ON SPACE WAR FOR ELDEN RING(INSIDE STEAM)!')
-        time.sleep(2)
         return GameDownloader().SpaceWarDownloadOrUpdate()
