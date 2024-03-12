@@ -1,1 +1,1 @@
-pyinstaller --onefile --icon=EldenRing.ico main.py
+pyinstaller --onefile --uac-admin --name "Elden Ring Enabler" --icon=EldenRing.ico main.py
