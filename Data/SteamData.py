@@ -68,7 +68,7 @@ class Steam():
             print('Trying to start download/update...')
             try:
                 start_time = time.time()
-                print(f'Progress running... {SteamGameName} download/update running DO NOT CLOSE THE WINDOW!')
+                print(f'Progress {SteamGameName} download/update running... DO NOT CLOSE THE WINDOW!')
                 print(f'THIS MIGHT TAKE A WHILE SO BE PATIENT! -> it will go to -> {DownloadPath}')
 
                 # result = subprocess.run(cmd, check=True, shell=True, capture_output=True, text=True)
