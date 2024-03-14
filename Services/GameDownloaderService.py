@@ -11,11 +11,21 @@ class GameDownloader:
                                                  "ELDEN RING",
                                                  DownloadPath,
                                                  r'Game\eldenring.exe')
-    def SpaceWarDownloadOrUpdate(self):
+    def SpaceWarDownloadOrUpdate(self, DownloadPath:str=''):
         return Steam().RunSteamCMDUpdateFunction("480",
                                                  "Spacewar",
-                                                 '',
+                                                 DownloadPath,
                                                  'SteamworksExample.exe')
+    def PalworldDownloadOrUpdate(self, DownloadPath:str=''):
+        return Steam().RunSteamCMDUpdateFunction("1623730",
+                                                 "Palworld",
+                                                 DownloadPath,
+                                                 'Palworld.exe')
+    def EnshroudedDownloadOrUpdate(self, DownloadPath:str=''):
+        return Steam().RunSteamCMDUpdateFunction("1203620",
+                                                 "Enshrouded",
+                                                 DownloadPath,
+                                                 'enshrouded.exe')
 
     def DownloadLinks(self, jsonDict:dict):
         Links = GoogleDrive().GetGoogleDriveSheetAsCsv('1gOa-GoZt4C5oUtMIHTqyBtxt4CMTK3Y6Qqr5sjrEWek')

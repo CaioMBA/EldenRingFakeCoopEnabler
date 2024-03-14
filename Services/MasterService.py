@@ -16,20 +16,27 @@ class Master():
                 print('[ MASTER MENU ]')
                 print('Choose a game to manage:')
                 print('[1] -> ELDEN RING')
+                print('[2] -> Palworld')
+                print('[3] -> Enshrouded')
+                print('[4] -> Spacewar (DOWNLOAD/UPDATE ONLY)')
                 print('[0] -> Quit | Exit')
                 option = input('Choose an option(Left Number): ')
                 match option:
                     case '1':
                         Utils().clear_console()
                         EldenRing(self.jsonDict['ELDEN RING']).menu()
+                    case '4':
+                        Utils().clear_console()
+                        GameDownloader().SpaceWarDownloadOrUpdate(self.jsonDict['Spacewar']['GamePath'])
+                        Utils().clear_console()
+                        print('Spacewar has been Download/updated.')
                     case '0':
                         Utils().clear_console()
                         print('Quitting MASTER MENU...')
                         break
                     case _:
                         Utils().clear_console()
-                        print('Invalid Option')
-                        self.menu()
+                        print('Invalid Option, or not implemented yet. Try again.')
         except Exception as e:
             Utils().clear_console()
             print("Error:", e)

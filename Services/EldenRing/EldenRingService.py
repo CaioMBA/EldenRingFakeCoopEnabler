@@ -21,7 +21,7 @@ class EldenRing():
     def CheckIfPirateGameIsEnabled(self):
         for root, dirs, files in os.walk(self.EldenRingGamePath):
             for fileName in files:
-                if fileName.lower() == 'winmm.dll':
+                if any(str(fileName).lower() == file.lower() for file in self.PirateArchives['Files']):
                     return True
         return False
     def EnablePirateGame(self):
