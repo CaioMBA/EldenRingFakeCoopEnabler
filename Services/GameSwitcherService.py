@@ -1,4 +1,5 @@
 import os
+from Services.LiesOfP.LiesOfPService import LiesOfP
 from Services.UtilsService import Utils
 from Services.EldenRing.EldenRingService import EldenRing
 from Services.GameDownloaderService import GameDownloader
@@ -21,7 +22,7 @@ class GameSwitcher():
             case 'ELDEN RING':
                 return EldenRing(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case 'Lies of P':
-                return None
+                return LiesOfP(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
 
             case _:
                 print(f'Atenção! função SetGameFunctions não tem implementação para o jogo escolhido. Game: {self.Game}')
@@ -78,8 +79,6 @@ class GameSwitcher():
                 if any(str(dirName).lower() == Dir.lower() for Dir in self.PirateArchives['Folders']):
                     return True
         return False
-
-
 
     def Menu(self):
         while True:

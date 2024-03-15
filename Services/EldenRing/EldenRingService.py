@@ -1,4 +1,4 @@
-import os, shutil, time, configparser
+import os, shutil, configparser
 from Services.UtilsService import Utils
 from Services.GameDownloaderService import GameDownloader
 from Services.EldenRing.ModsService import Mods
@@ -16,12 +16,6 @@ class EldenRing():
         self.Mods = Mods(ModsPath, self.EldenRingModEnginePath, self.EldenRingGamePath)
         self.PirateArchives = pirateArchives
 
-    def CheckIfPirateGameIsEnabled(self):
-        for root, dirs, files in os.walk(self.EldenRingGamePath):
-            for fileName in files:
-                if any(str(fileName).lower() == file.lower() for file in self.PirateArchives['Files']):
-                    return True
-        return False
     def EnablePirateGame(self):
         print("Enabling play with Pirate Game")
         if self.EldenRingFixPath == '' or not os.path.exists(self.EldenRingFixPath):

@@ -27,6 +27,9 @@ class Master():
                     case '1':
                         Utils().clear_console()
                         GameSwitcher('ELDEN RING', self.jsonDict['ELDEN RING']).Menu()
+                    case '4':
+                        Utils().clear_console()
+                        GameSwitcher('Lies of P', self.jsonDict['Lies of P']).Menu()
                     case '5':
                         Utils().clear_console()
                         GameDownloader().SpaceWarDownloadOrUpdate(self.jsonDict['Spacewar']['GamePath'])

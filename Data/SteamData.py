@@ -91,7 +91,7 @@ class Steam():
                 os.rename(DownloadPath.replace(SteamGameName, SteamGameName.lower()), DownloadPath)
                 Utils().DeleteSpecificDir(os.path.join(DownloadPath, 'steamapps'))
                 Utils().DeleteSpecificDir(os.path.join(DownloadPath, '_CommonRedist'))
-                print(f"{SteamGameName} Installation/Update Successful!")
+                print(f"{SteamGameName} Installation/Update Successful! At: {DownloadPath}")
                 return DownloadPath
             except subprocess.CalledProcessError as e:
                 print(f"Failed to download {SteamGameName}, error: {e}")
