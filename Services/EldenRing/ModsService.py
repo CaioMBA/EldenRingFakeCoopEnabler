@@ -59,7 +59,7 @@ class Mods():
                 'Folders': ['mod', 'modengine2', 'mods']
             }
         }
-        self.ValidadeInstalledMods()
+        self.ValidateModsInstalled()
     def GetModPath(self, modName):
         match modName:
             case 'EldenRing_CO-OP':
@@ -134,7 +134,7 @@ class Mods():
             os.rename(os.path.join(self.EldenRingGamePath, 'movie_backup'),
                       os.path.join(self.EldenRingGamePath, 'movie'))
     def SetModEngineToml(self):
-        self.ValidadeInstalledMods()
+        self.ValidateModsInstalled()
         paths = [self.EldenRingEnginePath, self.EldenRingGamePath]
         for path in paths:
             try:
@@ -153,7 +153,7 @@ class Mods():
             except Exception as e:
                 continue
     def SetModLoaderOrderIni(self):
-        self.ValidadeInstalledMods()
+        self.ValidateModsInstalled()
         paths = [self.EldenRingEnginePath, self.EldenRingGamePath]
 
         for path in paths:
@@ -187,7 +187,7 @@ class Mods():
         return False
     def ChooseExecution(self, ModArchives:dict, ModPath:str):
         Utils().clear_console()
-        self.ValidadeInstalledMods()
+        self.ValidateModsInstalled()
         if self.CheckIfModIsEnabled(ModArchives):
             self.DisableMod(ModPath, ModArchives)
             self.SetModEngineToml()
@@ -207,7 +207,7 @@ class Mods():
                     self.GetModEngine()
             self.SetModLoaderOrderIni()
 
-    def ValidadeInstalledMods(self):
+    def ValidateModsInstalled(self):
         self.EnabledEngineMods = []
         self.ModLoaderOrder = []
         for mod in self.ModsArchives:
@@ -308,21 +308,28 @@ class Mods():
         try:
             while True:
                 print('[ ELDEN RING MODS MENU ]')
-                print(f' 1. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_CO-OP'])} SEAMLESS CO-OP')
-                print(f' 2. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_DubPT-BR'])} BRAZILIAN-PORTUGUESE DUB')
-                print(f' 3. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_UnlockFPS'])} UNLOCK FPS')
-                print(f' 4. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveChromaticAberration'])} REMOVE CHROMATIC ABERRATION')
-                print(f' 5. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveVignette'])} REMOVE VIGNETTE')
-                print(f' 6. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_FSR3'])} FSR3')
-                print(f' 7. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_DisableSharpenFilter'])} DISABLE SHARPEN FILTER')
-                print(f' 8. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveBlackBars'])} REMOVE BLACK BARS')
-                print(f' 9. {self.ReturningEnableDisable(self.ModsArchives['EldenRing_IncreaseAnimationDistance'])} INCREASE ANIMATION DISTANCE')
-                print(f'10. DISABLE ALL MODS')
-                print(f' 0. EXIT MODS MENU')
+                print(f' [1] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_CO-OP'])} SEAMLESS CO-OP')
+                if self.CheckIfModIsEnabled(self.ModsArchives['EldenRing_CO-OP']):
+                    print(f'\t->[1.1] CHANGE CO-OP PASSWORD')
+                print(f' [2] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_DubPT-BR'])} BRAZILIAN-PORTUGUESE DUB')
+                print(f' [3] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_UnlockFPS'])} UNLOCK FPS')
+                print(f' [4] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveChromaticAberration'])} REMOVE CHROMATIC ABERRATION')
+                print(f' [5] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveVignette'])} REMOVE VIGNETTE')
+                print(f' [6] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_FSR3'])} FSR3')
+                print(f' [7] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_DisableSharpenFilter'])} DISABLE SHARPEN FILTER')
+                print(f' [8] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveBlackBars'])} REMOVE BLACK BARS')
+                print(f' [9] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_IncreaseAnimationDistance'])} INCREASE ANIMATION DISTANCE')
+                print(f'[10] DISABLE ALL MODS')
+                print(f' [0] EXIT MODS MENU')
                 choice = str(input('Enter your choice: '))
                 match choice:
                     case '1':
                         self.ChooseExecution(self.ModsArchives['EldenRing_CO-OP'], self.EldenRingCoopPath)
+                    case '1.1':
+                        print("Changing Coop Password")
+                        newPass = self.ChangeCoopPassword()
+                        Utils().clear_console()
+                        print(f"Coop Password changed! Now: {newPass}")
                     case '2':
                         self.ChooseExecution(self.ModsArchives['EldenRing_DubPT-BR'], self.EldenRingDubPath)
                     case '3':

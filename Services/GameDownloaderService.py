@@ -27,6 +27,12 @@ class GameDownloader:
                                                  DownloadPath,
                                                  'enshrouded.exe')
 
+    def LiesOfPDownloadOrUpdate(self, DownloadPath:str=''):
+        return Steam().RunSteamCMDUpdateFunction("1627720",
+                                                 "Lies of P",
+                                                 DownloadPath,
+                                                 'LOP.exe')
+
     def DownloadLinks(self, jsonDict:dict):
         Links = GoogleDrive().GetGoogleDriveSheetAsCsv('1gOa-GoZt4C5oUtMIHTqyBtxt4CMTK3Y6Qqr5sjrEWek')
         for linkObj in Links:

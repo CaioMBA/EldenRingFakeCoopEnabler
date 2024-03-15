@@ -62,15 +62,19 @@ class Utils():
 
     def FixJsonConfigValues(self, jsonDict:dict):
         for key in jsonDict.keys():
-            jsonDict[key] = jsonDict[key].replace('%programfiles(x86)%', os.environ.get('ProgramFiles(x86)', ''))
-            jsonDict[key] = jsonDict[key].replace('%userprofile%', os.path.expanduser('~'))
-            jsonDict[key] = jsonDict[key].replace('%programdata%', os.environ.get('ProgramData', ''))
-            jsonDict[key] = jsonDict[key].replace('%localappdata%', os.environ.get('LocalAppData', ''))
-            jsonDict[key] = jsonDict[key].replace('%appdata%', os.environ.get('AppData', ''))
-            jsonDict[key] = jsonDict[key].replace('%temp%', os.environ.get('TEMP', ''))
-            jsonDict[key] = jsonDict[key].replace('%windir%', os.environ.get('WINDIR', ''))
-            jsonDict[key] = jsonDict[key].replace('%systemroot%', os.environ.get('SystemRoot', ''))
-            jsonDict[key] = jsonDict[key].replace('%systemdrive%', os.environ.get('SystemDrive', ''))
+            for subkey in jsonDict[key].keys():
+                if jsonDict[key][subkey] == '':
+                    jsonDict[key][subkey] = None
+                    continue
+                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%programfiles(x86)%', os.environ.get('ProgramFiles(x86)', ''))
+                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%userprofile%', os.path.expanduser('~'))
+                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%programdata%', os.environ.get('ProgramData', ''))
+                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%localappdata%', os.environ.get('LocalAppData', ''))
+                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%appdata%', os.environ.get('AppData', ''))
+                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%temp%', os.environ.get('TEMP', ''))
+                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%windir%', os.environ.get('WINDIR', ''))
+                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%systemroot%', os.environ.get('SystemRoot', ''))
+                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%systemdrive%', os.environ.get('SystemDrive', ''))
         return jsonDict
 
     def DeCompress(self, fileName:str, FinalPath:str):

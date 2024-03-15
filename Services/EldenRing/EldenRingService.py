@@ -3,20 +3,18 @@ from Services.UtilsService import Utils
 from Services.GameDownloaderService import GameDownloader
 from Services.EldenRing.ModsService import Mods
 class EldenRing():
-    def __init__(self, jsonDict:dict):
-        if jsonDict['GamePath'] == '' or jsonDict['GamePath'] is None:
+    def __init__(self, GamePath, fixPath, EnginePath, ModsPath, pirateArchives:dict):
+        if GamePath == '' or GamePath is None:
             path = GameDownloader().EldenRingDownloadOrUpdate()
             Utils().updateJsonConfig('ELDEN RING', 'GamePath', path + r'\Game')
-            Utils().ReadJsonConfig()
-        jsonDict = Utils().FixJsonConfigValues(jsonDict)
-        self.EldenRingGamePath = jsonDict['GamePath']
-        self.EldenRingFixPath = jsonDict['FixPath']
-        self.EldenRingModEnginePath = jsonDict['EnginePath']
-        self.EldenRingMods = Mods(jsonDict['ModsPath'], self.EldenRingModEnginePath, self.EldenRingGamePath)
-        self.PirateArchives = {
-            "Files": ['winmm.dll', 'OnlineFix64.dll', 'OnlineFix.url', 'OnlineFix.ini', 'dlllist.txt'],
-            "Folders": []
-        }
+            print('FOR THE GAME TO WORK, YOU NEED TO RESTART THIS PROGRAM')
+            return
+
+        self.EldenRingGamePath = GamePath
+        self.EldenRingFixPath = fixPath
+        self.EldenRingModEnginePath = EnginePath
+        self.Mods = Mods(ModsPath, self.EldenRingModEnginePath, self.EldenRingGamePath)
+        self.PirateArchives = pirateArchives
 
     def CheckIfPirateGameIsEnabled(self):
         for root, dirs, files in os.walk(self.EldenRingGamePath):
@@ -109,62 +107,3 @@ class EldenRing():
                 return LanguageDict[int(LanguageChoice)]
             Utils().clear_console()
             print("Invalid choice, choose another one")
-
-
-
-
-    def menu(self):
-        Utils().clear_console()
-        try:
-            while True:
-                print("[ ELDEN RING GENERAL MENU ]")
-                print(f"1. {'DISABLE' if self.CheckIfPirateGameIsEnabled() else 'ENABLE'} play pirate game")
-                print("2. Change TEXT/SUBTITLE pirate game LANGUAGE")
-                print("3. MODS MENU")
-                print("4. Change co-op password")
-                print("5. Download-Install|Update Elden Ring")
-                print("0. Exit")
-                choice = input("Enter choice: ")
-                match choice:
-                    case "1":
-                        if self.CheckIfPirateGameIsEnabled():
-                            self.DisablePirateGame()
-                        else:
-                            self.EnablePirateGame()
-                    case "2":
-                        print("Changing Language")
-                        newLang = self.ChangeLanguage()
-                        Utils().clear_console()
-                        print(f"Language changed! Now: {newLang}")
-                    case "3":
-                        Utils().clear_console()
-                        self.EldenRingMods.menu()
-                    case "4":
-                        print("Changing Coop Password")
-                        newPass = self.EldenRingMods.ChangeCoopPassword()
-                        Utils().clear_console()
-                        print(f"Coop Password changed! Now: {newPass}")
-                    case "5":
-                        print("Downloading and Installing Elden Ring")
-                        GamePath = GameDownloader().EldenRingDownloadOrUpdate(self.EldenRingGamePath.replace(r'\Game', ''))
-                        if GamePath != None:
-                            self.EldenRingGamePath = GamePath + r'\Game'
-                            Utils().updateJsonConfig('EldenRingGamePath', 'GamePath', self.EldenRingGamePath)
-                        time.sleep(2.5)
-                        Utils().clear_console()
-                        if GamePath != None:
-                            print(f'Download and Install Elden Ring completed! Path: {self.EldenRingGamePath}')
-                        else:
-                            print(f'Failed to download Elden Ring')
-                    case "0":
-                        print("Exiting Elden Ring Menu...")
-                        Utils().clear_console()
-                        break
-                    case _:
-                        Utils().clear_console()
-                        print(f"Invalid choice: {choice}, choose another one")
-
-        except Exception as e:
-            Utils().clear_console()
-            print(f"Error: {e}")
-            self.menu()
