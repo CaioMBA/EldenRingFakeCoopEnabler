@@ -1,7 +1,9 @@
 import os
-from Services.LiesOfP.LiesOfPService import LiesOfP
+
 from Services.UtilsService import Utils
 from Services.EldenRing.EldenRingService import EldenRing
+from Services.LiesOfP.LiesOfPService import LiesOfP
+from Services.Palworld.PalworldService import Palworld
 from Services.GameDownloaderService import GameDownloader
 
 class GameSwitcher():
@@ -23,6 +25,8 @@ class GameSwitcher():
                 return EldenRing(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case 'Lies of P':
                 return LiesOfP(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
+            case 'Palworld':
+                return Palworld(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
 
             case _:
                 print(f'Atenção! função SetGameFunctions não tem implementação para o jogo escolhido. Game: {self.Game}')
@@ -42,13 +46,13 @@ class GameSwitcher():
                 }
             case 'Palworld':
                 return {
-                    "Files": ['Palworld-backup.exe'],
-                    "Folders": ['Engine-backup', 'Pal-backup']
+                    "Files": ['Palworld_backup.exe'],
+                    "Folders": ['Engine_backup', 'Pal_backup']
                 }
             case 'Lies of P':
                 return {
                     "Files": [],
-                    "Folders": ['Engine-backup']
+                    "Folders": ['Engine_backup']
                 }
             case _:
                 return {

@@ -63,8 +63,8 @@ class Utils():
     def FixJsonConfigValues(self, jsonDict:dict):
         for key in jsonDict.keys():
             for subkey in jsonDict[key].keys():
-                if jsonDict[key][subkey] == '':
-                    jsonDict[key][subkey] = None
+                if jsonDict[key][subkey] is None:
+                    jsonDict[key][subkey] = ''
                     continue
                 jsonDict[key][subkey] = jsonDict[key][subkey].replace('%programfiles(x86)%', os.environ.get('ProgramFiles(x86)', ''))
                 jsonDict[key][subkey] = jsonDict[key][subkey].replace('%userprofile%', os.path.expanduser('~'))
