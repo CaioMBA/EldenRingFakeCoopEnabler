@@ -61,6 +61,9 @@ class EldenRing():
             try:
                 config = configparser.ConfigParser()
                 filePath = os.path.join(path, 'OnlineFix.ini')
+                if not os.path.exists(filePath):
+                    print(f"The file '{filePath}' does not exist.")
+                    continue
                 config.read(filePath)
                 if languageChoice == '':
                     print(f'Current Language: {config['Main']['Language']}')

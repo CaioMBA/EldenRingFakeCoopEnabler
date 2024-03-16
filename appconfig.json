@@ -1,19 +1,19 @@
 {
     "ELDEN RING": {
-        "GamePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\ELDEN RING\\Game",
-        "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\SteamFixGames\\ELDEN RING\\EldenRing_FIX_PIRATE_ORIGINAL",
-        "ModsPath": "C:\\Users\\caiom\\OneDrive\\Documents\\SteamFixGames\\ELDEN RING\\EldenRing_Mods",
-        "EnginePath": "C:\\Users\\caiom\\OneDrive\\Documents\\SteamFixGames\\ELDEN RING\\EldenRing_Engine"
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
     },
     "Lies of P": {
-        "GamePath": "c:\\program files (x86)\\steam\\steamapps\\common\\Lies of P",
-        "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\SteamFixGames\\Lies of P\\LiesOfP_Pirate_FIX",
+        "GamePath": "",
+        "FixPath": "",
         "ModsPath": "",
         "EnginePath": ""
     },
     "Palworld": {
-        "GamePath": "c:\\program files (x86)\\steam\\steamapps\\common\\Palworld",
-        "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\SteamFixGames\\Palworld\\Palworld_Pirate_FIX",
+        "GamePath": "",
+        "FixPath": "",
         "ModsPath": "",
         "EnginePath": ""
     },
@@ -24,12 +24,12 @@
         "EnginePath": ""
     },
     "Sekiro": {
-        "GamePath": "c:\\program files (x86)\\steam\\steamapps\\common\\Sekiro",
-        "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\SteamFixGames\\Sekiro\\Sekiro_Pirate_FIX",
+        "GamePath": "",
+        "FixPath": "",
         "ModsPath": "",
         "EnginePath": ""
     },
     "Spacewar": {
-        "GamePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Spacewar"
+        "GamePath": ""
     }
 }
