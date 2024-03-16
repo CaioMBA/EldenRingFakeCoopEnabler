@@ -23,6 +23,12 @@
         "ModsPath": "",
         "EnginePath": ""
     },
+    "Sekiro": {
+        "GamePath": "c:\\program files (x86)\\steam\\steamapps\\common\\Sekiro",
+        "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\SteamFixGames\\Sekiro\\Sekiro_Pirate_FIX",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
     "Spacewar": {
         "GamePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Spacewar"
     }

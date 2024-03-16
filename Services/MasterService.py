@@ -20,7 +20,8 @@ class Master():
                 print('[2] -> Palworld')
                 print('[3] -> Enshrouded')
                 print('[4] -> Lies of P')
-                print('[5] -> Spacewar (DOWNLOAD/UPDATE ONLY)')
+                print('[5] -> Sekiro: Shadows Die Twice')
+                print('[6] -> Spacewar (DOWNLOAD/UPDATE ONLY)')
                 print('[0] -> Quit | Exit')
                 option = input('Choose an option(Left Number): ')
                 match option:
@@ -34,6 +35,9 @@ class Master():
                         Utils().clear_console()
                         GameSwitcher('Lies of P', self.jsonDict['Lies of P']).Menu()
                     case '5':
+                        Utils().clear_console()
+                        GameSwitcher('Sekiro: Shadows Die Twice', self.jsonDict['Sekiro']).Menu()
+                    case '6':
                         Utils().clear_console()
                         SpaceWar().Menu()
                         Utils().clear_console()

@@ -4,6 +4,7 @@ from Services.UtilsService import Utils
 from Services.EldenRing.EldenRingService import EldenRing
 from Services.LiesOfP.LiesOfPService import LiesOfP
 from Services.Palworld.PalworldService import Palworld
+from Services.Sekiro.SekiroService import Sekiro
 from Services.GameDownloaderService import GameDownloader
 
 class GameSwitcher():
@@ -15,7 +16,7 @@ class GameSwitcher():
         self.mods = jsonDict['ModsPath']
         self.PirateArchives = self.SetGamePirateArchives()
         self.GameService = self.SetGameFunctions()
-        self.GamesAvailableChangeTextLanguage = ['ELDEN RING', 'Enshrouded']
+        self.GamesAvailableChangeTextLanguage = ['ELDEN RING', 'Enshrouded', 'Sekiro: Shadows Die Twice']
         self.GamesAvailableModsMenu = ['ELDEN RING']
 
 
@@ -27,7 +28,8 @@ class GameSwitcher():
                 return LiesOfP(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case 'Palworld':
                 return Palworld(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
-
+            case 'Sekiro: Shadows Die Twice':
+                return Sekiro(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case _:
                 print(f'Atenção! função SetGameFunctions não tem implementação para o jogo escolhido. Game: {self.Game}')
     def SetGamePirateArchives(self):
@@ -54,6 +56,12 @@ class GameSwitcher():
                     "Files": [],
                     "Folders": ['Engine_backup']
                 }
+            case 'Sekiro: Shadows Die Twice':
+                return {
+                    "Files": ['cream_api.ini', 'dinput8.dll', 'sekiro_backup.exe',
+                              'steam_api64.org', 'SekiroOnlineFont.ttf', 'steam_api64_backup.dll'],
+                    "Folders": []
+                }
             case _:
                 return {
                     "Files": [],
@@ -72,12 +80,14 @@ class GameSwitcher():
                 return GameDownloader().EnshroudedDownloadOrUpdate(self.gamePath)
             case 'Lies of P':
                 return GameDownloader().LiesOfPDownloadOrUpdate(self.gamePath)
+            case 'Sekiro: Shadows Die Twice':
+                return GameDownloader().SekiroDownloadOrUpdate(self.gamePath)
             case _:
                 print(f'Atenção! função SetGameDownloader não tem implementação para o jogo escolhido. Game: {self.Game}')
     def CheckIfPirateGameIsEnabled(self):
         for root, dirs, files in os.walk(self.gamePath):
             for fileName in files:
-                if any(str(fileName).lower() == file.lower() for file in self.PirateArchives['Files']):
+                if any(str(fileName).lower() == str(file).lower() for file in self.PirateArchives['Files']):
                     return True
             for dirName in dirs:
                 if any(str(dirName).lower() == Dir.lower() for Dir in self.PirateArchives['Folders']):

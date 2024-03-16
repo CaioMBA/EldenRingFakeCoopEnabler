@@ -32,6 +32,11 @@ class GameDownloader:
                                                  "Lies of P",
                                                  DownloadPath,
                                                  'LOP.exe')
+    def SekiroDownloadOrUpdate(self, DownloadPath:str=''):
+        return Steam().RunSteamCMDUpdateFunction("814380",
+                                                 "Sekiro",
+                                                 DownloadPath,
+                                                 'sekiro.exe')
 
     def DownloadLinks(self, jsonDict:dict):
         Links = GoogleDrive().GetGoogleDriveSheetAsCsv('1gOa-GoZt4C5oUtMIHTqyBtxt4CMTK3Y6Qqr5sjrEWek')

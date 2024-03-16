@@ -1,4 +1,4 @@
-import os, shutil, configparser
+import os, shutil
 from Services.UtilsService import Utils
 from Services.GameDownloaderService import GameDownloader
 from Services.EldenRing.ModsService import Mods
