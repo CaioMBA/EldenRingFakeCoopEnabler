@@ -12,6 +12,7 @@ class Mods():
         self.EldenRingRemoveBlackBars = os.path.join(MainModsPath, 'EldenRing_RemoveBlackBars')
         self.EldenRingRemoveChromaticAberrationPath = os.path.join(MainModsPath, 'EldenRing_RemoveChromaticAberration')
         self.EldenRingRemoveVignette = os.path.join(MainModsPath, 'EldenRing_RemoveVignette')
+        self.EldenRingSkipIntro = os.path.join(MainModsPath, 'EldenRing_SkipTheIntro')
         self.EldenRingUnlockFPS = os.path.join(MainModsPath, 'EldenRing_UnlockFPS')
 
         self.EnabledEngineMods = []
@@ -28,6 +29,10 @@ class Mods():
             'EldenRing_UnlockFPS': {
                 'Files': ['UnlockTheFps.dll'],
                 'Folders': ['UnlockTheFps']
+            },
+            'EldenRing_SkipTheIntro': {
+                'Files': ['SkipTheIntro.dll'],
+                'Folders': ['SkipTheIntro']
             },
             'EldenRing_IncreaseAnimationDistance': {
                 'Files': ['IncreaseAnimationDistance.dll'],
@@ -80,6 +85,8 @@ class Mods():
                 return self.EldenRingRemoveBlackBars
             case 'EldenRing_IncreaseAnimationDistance':
                 return self.EldenRingIncreaseAnimationDistance
+            case 'EldenRing_SkipTheIntro':
+                return self.EldenRingSkipIntro
             case _:
                 Exception = f"Mod '{modName}' not found"
                 raise Exception
@@ -237,6 +244,8 @@ class Mods():
                                 self.ModLoaderOrder.append('UltrawideFix.dll')
                             case 'EldenRing_IncreaseAnimationDistance':
                                 self.ModLoaderOrder.append('IncreaseAnimationDistance.dll')
+                            case 'EldenRing_SkipTheIntro':
+                                self.ModLoaderOrder.append('SkipTheIntro.dll')
 
     def DisableAllMods(self):
         print('Disabling all mods')
@@ -308,18 +317,19 @@ class Mods():
         try:
             while True:
                 print('[ ELDEN RING MODS MENU ]')
-                print(f' [1] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_CO-OP'])} SEAMLESS CO-OP')
+                print(f' [1] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_CO-OP'])} -> SEAMLESS CO-OP')
                 if self.CheckIfModIsEnabled(self.ModsArchives['EldenRing_CO-OP']):
                     print(f'\t->[1.1] CHANGE CO-OP PASSWORD')
-                print(f' [2] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_DubPT-BR'])} BRAZILIAN-PORTUGUESE DUB')
-                print(f' [3] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_UnlockFPS'])} UNLOCK FPS')
-                print(f' [4] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveChromaticAberration'])} REMOVE CHROMATIC ABERRATION')
-                print(f' [5] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveVignette'])} REMOVE VIGNETTE')
-                print(f' [6] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_FSR3'])} FSR3')
-                print(f' [7] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_DisableSharpenFilter'])} DISABLE SHARPEN FILTER')
-                print(f' [8] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveBlackBars'])} REMOVE BLACK BARS')
-                print(f' [9] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_IncreaseAnimationDistance'])} INCREASE ANIMATION DISTANCE')
-                print(f'[10] DISABLE ALL MODS')
+                print(f' [2] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_DubPT-BR'])} -> BRAZILIAN-PORTUGUESE DUB')
+                print(f' [3] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_UnlockFPS'])} -> UNLOCK FPS')
+                print(f' [4] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveChromaticAberration'])} -> REMOVE CHROMATIC ABERRATION')
+                print(f' [5] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveVignette'])} -> REMOVE VIGNETTE')
+                print(f' [6] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_FSR3'])} -> FSR3')
+                print(f' [7] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_DisableSharpenFilter'])} -> DISABLE SHARPEN FILTER')
+                print(f' [8] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_RemoveBlackBars'])} -> REMOVE BLACK BARS')
+                print(f' [9] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_IncreaseAnimationDistance'])} -> INCREASE ANIMATION DISTANCE')
+                print(f'[10] {self.ReturningEnableDisable(self.ModsArchives['EldenRing_SkipTheIntro'])} -> SKIP THE INTRO')
+                print(f'[11] DISABLE ALL MODS')
                 print(f' [0] EXIT MODS MENU')
                 choice = str(input('Enter your choice: '))
                 match choice:
@@ -347,6 +357,8 @@ class Mods():
                     case '9':
                         self.ChooseExecution(self.ModsArchives['EldenRing_IncreaseAnimationDistance'], self.EldenRingIncreaseAnimationDistance)
                     case '10':
+                        self.ChooseExecution(self.ModsArchives['EldenRing_SkipTheIntro'], self.EldenRingSkipIntro)
+                    case '11':
                         self.DisableAllMods()
                     case '0':
                         print("Exiting Mods Menu...")

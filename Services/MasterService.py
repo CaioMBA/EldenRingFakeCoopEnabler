@@ -6,7 +6,7 @@ from Services.GameDownloaderService import GameDownloader
 class Master():
     def __init__(self, jsonDict: dict):
         GameDownloader().DownloadLinks(jsonDict)
-        self.jsonDict = Utils().ReadJsonConfig()
+        self.jsonDict = jsonDict
         self.jsonDict = Utils().FixJsonConfigValues(self.jsonDict)
         if jsonDict['Spacewar']['GamePath'] == '' or jsonDict['Spacewar']['GamePath'] is None:
             path = SpaceWar().InstallSpaceWar()
@@ -18,7 +18,7 @@ class Master():
                 print('Choose a game to manage:')
                 print('[1] -> ELDEN RING')
                 print('[2] -> Palworld')
-                print('[3] -> Enshrouded')
+                print('[3] -> Enshrouded [NOT IMPLEMENTED YET]')
                 print('[4] -> Lies of P')
                 print('[5] -> Sekiro: Shadows Die Twice')
                 print('[6] -> Spacewar (DOWNLOAD/UPDATE ONLY)')
