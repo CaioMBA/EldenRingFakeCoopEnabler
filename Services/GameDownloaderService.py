@@ -43,6 +43,11 @@ class GameDownloader:
                                                  "AWayOut",
                                                  DownloadPath,
                                                  r'installScript.vdf')
+    def  ItTakesTwoDownloadOrUpdate(self, DownloadPath:str=''):
+        return Steam().RunSteamCMDUpdateFunction("1426210",
+                                                 "ItTakesTwo",
+                                                 DownloadPath,
+                                                 r'installScript.vdf')
 
     def DownloadLinks(self, jsonDict:dict):
         print('Verifiyng and Downloading/Updating files...')

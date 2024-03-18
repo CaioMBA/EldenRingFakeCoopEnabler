@@ -30,8 +30,14 @@
         "EnginePath": ""
     },
     "AWayOut": {
-        "GamePath": "c:\\program files (x86)\\steam\\steamapps\\common\\AWayOut",
+        "GamePath": "",
         "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\AWayOut_Pirate_FIX",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "ItTakesTwo": {
+        "GamePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\ItTakesTwo",
+        "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\ItTakesTwo_Pirate_FIX",
         "ModsPath": "",
         "EnginePath": ""
     },

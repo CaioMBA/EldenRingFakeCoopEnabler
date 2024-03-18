@@ -6,6 +6,7 @@ from Services.LiesOfP.LiesOfPService import LiesOfP
 from Services.Palworld.PalworldService import Palworld
 from Services.Sekiro.SekiroService import Sekiro
 from Services.AWayOut.AWayOutService import AWayOut
+from Services.ItTakesTwo.ItTakesTwoService import ItTakesTwo
 from Services.GameDownloaderService import GameDownloader
 
 class GameSwitcher():
@@ -33,6 +34,8 @@ class GameSwitcher():
                 return Sekiro(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case 'A Way Out':
                 return AWayOut(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
+            case 'It Takes Two':
+                return ItTakesTwo(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case _:
                 print(f'Atenção! função SetGameFunctions não tem implementação para o jogo escolhido. Game: {self.Game}')
     def SetGamePirateArchives(self):
@@ -64,6 +67,11 @@ class GameSwitcher():
                     "Files": [],
                     "Folders": ['Haze1_backup']
                 }
+            case 'It Takes Two':
+                return {
+                    "Files": [],
+                    "Folders": ['Nuts_backup']
+                }
             case 'Sekiro: Shadows Die Twice':
                 return {
                     "Files": ['cream_api.ini', 'dinput8.dll', 'sekiro_backup.exe',
@@ -92,8 +100,10 @@ class GameSwitcher():
                 return GameDownloader().SekiroDownloadOrUpdate(self.gamePath)
             case 'A Way Out':
                 return GameDownloader().AWayOutDownloadOrUpdate(self.gamePath)
+            case 'It Takes Two':
+                return GameDownloader().ItTakesTwoDownloadOrUpdate(self.gamePath)
             case _:
-                print(f'Atenção! função SetGameDownloader não tem implementação para o jogo escolhido. Game: {self.Game}')
+                print(f'Atenção! função CallGameDownloader não tem implementação para o jogo escolhido. Game: {self.Game}')
     def CheckIfPirateGameIsEnabled(self):
         for root, dirs, files in os.walk(self.gamePath):
             for fileName in files:

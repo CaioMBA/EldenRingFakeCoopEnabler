@@ -93,7 +93,8 @@ class AWayOut():
         Utils().clear_console()
         LanguageDict = {
             1: 'en_US',
-            2: 'pt_BR'
+            2: 'pt_BR',
+            3: 'ru_RU'
         }
         while True:
             for key, value in LanguageDict.items():
