@@ -5,6 +5,7 @@ from Services.EldenRing.EldenRingService import EldenRing
 from Services.LiesOfP.LiesOfPService import LiesOfP
 from Services.Palworld.PalworldService import Palworld
 from Services.Sekiro.SekiroService import Sekiro
+from Services.AWayOut.AWayOutService import AWayOut
 from Services.GameDownloaderService import GameDownloader
 
 class GameSwitcher():
@@ -16,7 +17,7 @@ class GameSwitcher():
         self.mods = jsonDict['ModsPath']
         self.PirateArchives = self.SetGamePirateArchives()
         self.GameService = self.SetGameFunctions()
-        self.GamesAvailableChangeTextLanguage = ['ELDEN RING', 'Enshrouded', 'Sekiro: Shadows Die Twice']
+        self.GamesAvailableChangeTextLanguage = ['ELDEN RING', 'Enshrouded', 'Sekiro: Shadows Die Twice', 'A Way Out']
         self.GamesAvailableModsMenu = ['ELDEN RING']
 
 
@@ -30,6 +31,8 @@ class GameSwitcher():
                 return Palworld(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case 'Sekiro: Shadows Die Twice':
                 return Sekiro(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
+            case 'A Way Out':
+                return AWayOut(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case _:
                 print(f'Atenção! função SetGameFunctions não tem implementação para o jogo escolhido. Game: {self.Game}')
     def SetGamePirateArchives(self):
@@ -55,6 +58,11 @@ class GameSwitcher():
                 return {
                     "Files": [],
                     "Folders": ['Engine_backup']
+                }
+            case 'A Way Out':
+                return {
+                    "Files": [],
+                    "Folders": ['Haze1_backup']
                 }
             case 'Sekiro: Shadows Die Twice':
                 return {
@@ -82,6 +90,8 @@ class GameSwitcher():
                 return GameDownloader().LiesOfPDownloadOrUpdate(self.gamePath)
             case 'Sekiro: Shadows Die Twice':
                 return GameDownloader().SekiroDownloadOrUpdate(self.gamePath)
+            case 'A Way Out':
+                return GameDownloader().AWayOutDownloadOrUpdate(self.gamePath)
             case _:
                 print(f'Atenção! função SetGameDownloader não tem implementação para o jogo escolhido. Game: {self.Game}')
     def CheckIfPirateGameIsEnabled(self):

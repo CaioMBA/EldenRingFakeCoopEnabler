@@ -45,6 +45,7 @@ class Steam():
             if DownloadPath is None:
                 DownloadPath = os.path.expanduser('~'), 'Downloads'
 
+        if not DownloadPath.endswith(SteamGameName):
             DownloadPath = os.path.join(DownloadPath, SteamGameName)
 
         fileToCheck = os.path.join(DownloadPath, filePathCheck)

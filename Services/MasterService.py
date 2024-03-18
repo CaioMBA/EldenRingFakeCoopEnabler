@@ -21,7 +21,8 @@ class Master():
                 print('[3] -> Enshrouded [NOT IMPLEMENTED YET]')
                 print('[4] -> Lies of P')
                 print('[5] -> Sekiro: Shadows Die Twice')
-                print('[6] -> Spacewar (DOWNLOAD/UPDATE ONLY)')
+                print('[6] -> A way out')
+                print('\t[0.1] -> Spacewar (DOWNLOAD/UPDATE ONLY)')
                 print('[0] -> Quit | Exit')
                 option = input('Choose an option(Left Number): ')
                 match option:
@@ -38,6 +39,9 @@ class Master():
                         Utils().clear_console()
                         GameSwitcher('Sekiro: Shadows Die Twice', self.jsonDict['Sekiro']).Menu()
                     case '6':
+                        Utils().clear_console()
+                        GameSwitcher('A Way Out', self.jsonDict['AWayOut']).Menu()
+                    case '0.1':
                         Utils().clear_console()
                         SpaceWar().Menu()
                         Utils().clear_console()

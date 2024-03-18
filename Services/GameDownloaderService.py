@@ -38,8 +38,16 @@ class GameDownloader:
                                                  DownloadPath,
                                                  'sekiro.exe')
 
+    def AWayOutDownloadOrUpdate(self, DownloadPath:str=''):
+        return Steam().RunSteamCMDUpdateFunction("1222700",
+                                                 "AWayOut",
+                                                 DownloadPath,
+                                                 r'installScript.vdf')
+
     def DownloadLinks(self, jsonDict:dict):
+        print('Verifiyng and Downloading/Updating files...')
         Links = GoogleDrive().GetGoogleDriveSheetAsCsv('1gOa-GoZt4C5oUtMIHTqyBtxt4CMTK3Y6Qqr5sjrEWek')
+
         for linkObj in Links:
             if linkObj['Game'] not in jsonDict:
                 continue
@@ -57,3 +65,4 @@ class GameDownloader:
             shortPath = str(os.path.join(shortPath, linkObj['insideFile']))
             Utils().updateJsonConfig(key=linkObj['Game'], subkey=linkObj['JsonSubKey'], value=shortPath)
             print(f'[{linkObj["Game"]} <-> {linkObj["JsonSubKey"]}] -> {shortPath}')
+        print('All files are up to date')
