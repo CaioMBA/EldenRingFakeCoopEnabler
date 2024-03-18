@@ -18,7 +18,7 @@ class Master():
                 print('Choose a game to manage:')
                 print('[1] -> ELDEN RING')
                 print('[2] -> Palworld')
-                print('[3] -> Enshrouded [NOT IMPLEMENTED YET]')
+                print('[3] -> Enshrouded [NOT FULLY IMPLEMENTED YET]')
                 print('[4] -> Lies of P')
                 print('[5] -> Sekiro: Shadows Die Twice')
                 print('[6] -> A Way Out')
@@ -33,6 +33,10 @@ class Master():
                     case '2':
                         Utils().clear_console()
                         GameSwitcher('Palworld', self.jsonDict['Palworld']).Menu()
+                    case '3':
+                        Utils().clear_console()
+                        GameSwitcher('Enshrouded', self.jsonDict['Enshrouded']).Menu()
+                        time.sleep(5)
                     case '4':
                         Utils().clear_console()
                         GameSwitcher('Lies of P', self.jsonDict['Lies of P']).Menu()

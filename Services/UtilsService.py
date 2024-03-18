@@ -60,6 +60,11 @@ class Utils():
             jsonString = f.read()
             return json.loads(jsonString)
 
+    def GetSecretAccounts(self):
+        with open('secretAccounts.json', 'r') as f:
+            jsonString = f.read()
+            return json.loads(jsonString)
+
     def FixJsonConfigValues(self, jsonDict:dict):
         for key in jsonDict.keys():
             for subkey in jsonDict[key].keys():

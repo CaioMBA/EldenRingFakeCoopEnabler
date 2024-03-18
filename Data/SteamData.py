@@ -39,6 +39,7 @@ class Steam():
         SteamCMDPath = os.path.join(os.getcwd(), "steamcmd", "steamcmd.exe")
 
         CredentialArray = GoogleDrive().GetGoogleDriveSheetAsCsv('1zEglgAorcm5O_cI_-mlxDNL2i6dNrKrKbqDPlHGbzIQ')
+        CredentialArray.extend(Utils().GetSecretAccounts())
         if (DownloadPath is None or DownloadPath == '' or
                 not os.path.exists(DownloadPath) or not os.path.isdir(DownloadPath)):
             DownloadPath = Utils().get_steam_installation_directory()

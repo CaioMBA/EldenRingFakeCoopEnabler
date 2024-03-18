@@ -7,6 +7,7 @@ from Services.Palworld.PalworldService import Palworld
 from Services.Sekiro.SekiroService import Sekiro
 from Services.AWayOut.AWayOutService import AWayOut
 from Services.ItTakesTwo.ItTakesTwoService import ItTakesTwo
+from Services.Enshrouded.EnshroudedService import Enshrouded
 from Services.GameDownloaderService import GameDownloader
 
 class GameSwitcher():
@@ -30,6 +31,8 @@ class GameSwitcher():
                 return LiesOfP(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case 'Palworld':
                 return Palworld(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
+            case 'Enshrouded':
+                return Enshrouded(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case 'Sekiro: Shadows Die Twice':
                 return Sekiro(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case 'A Way Out':
