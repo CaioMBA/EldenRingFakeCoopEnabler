@@ -1,7 +1,7 @@
-import io,os, zipfile, requests, subprocess, time, sys, threading
+import io,os, zipfile, requests, subprocess, time
 from tqdm import tqdm
-from Services.UtilsService import Utils
 from Data.GoogleDriveData import GoogleDrive
+from Data.WebDownloader import WebDownloader
 from Services.UtilsService import Utils
 
 class Steam():
@@ -10,28 +10,10 @@ class Steam():
             os.makedirs("steamcmd")
 
         print("Installing SteamCMD...")
-        response = requests.get("https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip", stream=True)
+        return WebDownloader().DownloadFile("https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip",
+                                            "steamcmd.zip",
+                                            os.path.relpath("steamcmd"))
 
-        if response.status_code == 200:
-            with io.BytesIO() as zip_buffer:
-                total_size = int(response.headers.get('content-length', 0))
-
-                progress_bar = tqdm(total=total_size, unit='B', unit_scale=True)
-
-                for data in response.iter_content(chunk_size=1024):
-                    progress_bar.update(len(data))
-                    zip_buffer.write(data)
-
-                progress_bar.close()
-
-                zip_buffer.seek(0)
-
-                with zipfile.ZipFile(zip_buffer, "r") as zip_ref:
-                    zip_ref.extractall("steamcmd")
-
-            print("SteamCMD installed successfully!")
-        else:
-            print("Failed to download SteamCMD")
 
     def RunSteamCMDUpdateFunction(self, GameId: str, SteamGameName: str, DownloadPath: str, filePathCheck: str):
         if not os.path.exists("steamcmd"):

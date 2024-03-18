@@ -1,9 +1,9 @@
-from Services.UtilsService import Utils
-from tqdm import tqdm
 import requests, os
-class GitHub():
-    def DownloadAsset(self, url, fileName):
-        response = requests.get(url)
+from tqdm import tqdm
+from Services.UtilsService import Utils
+class WebDownloader():
+    def DownloadFile(self, download_url:str, fileName:str, finalDir:str = ''):
+        response = requests.get(download_url, stream=True)
 
         if response.status_code == 200:
             file_size = int(response.headers.get('content-length', 0))
@@ -15,8 +15,10 @@ class GitHub():
                             f.write(chunk)
                             progress_bar.update(len(chunk))
             filepath = os.path.relpath(fileName)
-            if fileName.endswith('.zip'):
-                return Utils().DeCompress(fileName, Utils().CheckIfOneDriveExists('Documents'))
+            if finalDir == '':
+                finalDir = Utils().CheckIfOneDriveExists('Documents')
+            if fileName.endswith('.zip') or fileName.endswith('.rar'):
+                return Utils().DeCompress(fileName, finalDir)
             return filepath
 
         else:

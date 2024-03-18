@@ -3,7 +3,7 @@ import os.path
 from Data.SteamData import Steam
 from Data.GoogleDriveData import GoogleDrive
 from Data.OneDriveData import OneDrive
-from Data.GitHubData import GitHub
+from Data.MediaFireData import MediaFire
 from Services.UtilsService import Utils
 class GameDownloader:
     def EldenRingDownloadOrUpdate(self, DownloadPath: str=''):
@@ -60,9 +60,8 @@ class GameDownloader:
                 continue
             if jsonDict[linkObj['Game']][linkObj['JsonSubKey']] != '':
                 continue
-            if linkObj['Origin'] == 'GitHub':
-                shortPath = GitHub().DownloadAsset(linkObj['Links'], linkObj['fileName'])
-                shortPath += linkObj['FinalDir']
+            if linkObj['Origin'] == 'MediaFire':
+                shortPath = MediaFire().DownloadFile(linkObj['Links'], linkObj['fileName'])
             elif linkObj['Origin'] == 'GoogleDrive':
                 shortPath = GoogleDrive().DownloadGoogleDriveFile(linkObj['Links'], linkObj['fileName'])
             elif linkObj['Origin'] == 'OneDrive':
