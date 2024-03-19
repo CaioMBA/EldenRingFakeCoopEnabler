@@ -47,6 +47,12 @@
         "ModsPath": "",
         "EnginePath": ""
     },
+    "LordsOfTheFallen": {
+        "GamePath": "c:\\program files (x86)\\steam\\steamapps\\common\\Lords of the Fallen",
+        "FixPath": "C:\\Users\\caiom\\Downloads\\LordOfTheFallen_Pirate_FIX",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
     "Spacewar": {
         "GamePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Spacewar"
     }

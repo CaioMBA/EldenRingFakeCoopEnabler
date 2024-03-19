@@ -53,6 +53,11 @@ class GameDownloader:
                                                  "Sons Of The Forest",
                                                  DownloadPath,
                                                  r'SonsOfTheForest.exe')
+    def LordsOfTheFallenDownloadOrUpdate(self, DownloadPath:str=''):
+        return Steam().RunSteamCMDUpdateFunction("1501750",
+                                                 "Lords of the Fallen",
+                                                 DownloadPath,
+                                                 r'LOTF2.exe')
 
     def DownloadLinks(self, jsonDict:dict):
         print('Verifiyng and Downloading/Updating files...')

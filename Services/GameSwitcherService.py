@@ -9,6 +9,7 @@ from Services.AWayOut.AWayOutService import AWayOut
 from Services.ItTakesTwo.ItTakesTwoService import ItTakesTwo
 from Services.Enshrouded.EnshroudedService import Enshrouded
 from Services.SonsOfTheForest.SonsOfTheForestService import SonsOfTheForest
+from Services.LordsOfTheFallen.LordsOfTheFallenService import LordsOfTheFallen
 from Services.GameDownloaderService import GameDownloader
 
 class GameSwitcher():
@@ -20,9 +21,10 @@ class GameSwitcher():
         self.mods = jsonDict['ModsPath']
         self.PirateArchives = self.SetGamePirateArchives()
         self.GameService = self.SetGameFunctions()
-        self.GamesAvailableChangeTextLanguage = ['ELDEN RING', 'Enshrouded', 'Sekiro: Shadows Die Twice', 'A Way Out']
+        self.GamesAvailableChangeTextLanguage = ['ELDEN RING', 'Enshrouded',
+                                                 'Sekiro: Shadows Die Twice',
+                                                 'A Way Out']
         self.GamesAvailableModsMenu = ['ELDEN RING']
-
 
     def SetGameFunctions(self):
         match self.Game:
@@ -42,6 +44,8 @@ class GameSwitcher():
                 return ItTakesTwo(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case 'Sons of the Forest':
                 return SonsOfTheForest(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
+            case 'Lords of the Fallen':
+                return LordsOfTheFallen(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case _:
                 print(f'Atenção! função SetGameFunctions não tem implementação para o jogo escolhido. Game: {self.Game}')
     def SetGamePirateArchives(self):
@@ -90,6 +94,11 @@ class GameSwitcher():
                               'OnlineFix64.dll', 'SteamOverlay64.dll', 'winmm.dll'],
                     "Folders": ['SonsOfTheForest_Data_backup']
                 }
+            case 'Lords of the Fallen':
+                return {
+                    "Files": ['LOTF2_backup.exe', 'LOTF2.of', 'launch_data.of'],
+                    "Folders": ['Engine_backup', 'LOTF2_backup']
+                }
             case _:
                 return {
                     "Files": [],
@@ -116,6 +125,8 @@ class GameSwitcher():
                 return GameDownloader().ItTakesTwoDownloadOrUpdate(self.gamePath)
             case 'Sons of the Forest':
                 return GameDownloader().SonsOfTheForestDownloadOrUpdate(self.gamePath)
+            case 'Lords of the Fallen':
+                return GameDownloader().LordsOfTheFallenDownloadOrUpdate(self.gamePath)
             case _:
                 print(f'Atenção! função CallGameDownloader não tem implementação para o jogo escolhido. Game: {self.Game}')
     def CheckIfPirateGameIsEnabled(self):

@@ -21,7 +21,11 @@ class Steam():
         SteamCMDPath = os.path.join(os.getcwd(), "steamcmd", "steamcmd.exe")
 
         CredentialArray = GoogleDrive().GetGoogleDriveSheetAsCsv('1zEglgAorcm5O_cI_-mlxDNL2i6dNrKrKbqDPlHGbzIQ')
-        CredentialArray.extend(Utils().GetSecretAccounts())
+        try:
+            CredentialArray.extend(Utils().GetSecretAccounts())
+        except Exception as e:
+            print(f"It was not possible to get secret accounts, error: {e}")
+
         if (DownloadPath is None or DownloadPath == '' or
                 not os.path.exists(DownloadPath) or not os.path.isdir(DownloadPath)):
             DownloadPath = Utils().get_steam_installation_directory()
@@ -60,8 +64,11 @@ class Steam():
                 except Exception as e:
                     print(f"steamcmd closed without state 0, error: {e}")
 
-                elapsedtime = time.time() - start_time
-                print(f"Elapsed Time: {int(elapsedtime // 60)}:{int(elapsedtime % 60)}")
+                elapsed_time = time.time() - start_time
+                minutes = int(elapsed_time // 60)
+                seconds = int(elapsed_time % 60)
+
+                print(f"Elapsed Time: {minutes:02d}:{seconds:02d}")
                 if not os.path.exists(fileToCheck):
                     print(f"Failed to download {SteamGameName}")
                     continue

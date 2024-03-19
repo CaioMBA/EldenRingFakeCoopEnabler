@@ -24,6 +24,7 @@ class Master():
                 print('[6] -> A Way Out')
                 print('[7] -> It Takes Two')
                 print('[8] -> Sons of the Forest')
+                print('[9] -> Lords of the Fallen')
                 print('\t[0.1] -> Spacewar (DOWNLOAD/UPDATE ONLY)')
                 print('[0] -> Quit | Exit')
                 option = input('Choose an option(Left Number): ')
@@ -53,6 +54,9 @@ class Master():
                     case '8':
                         Utils().clear_console()
                         GameSwitcher('Sons of the Forest', self.jsonDict['SonsOfTheForest']).Menu()
+                    case '9':
+                        Utils().clear_console()
+                        GameSwitcher('Lords of the Fallen', self.jsonDict['LordsOfTheFallen']).Menu()
                     case '0.1':
                         Utils().clear_console()
                         SpaceWar().Menu()
