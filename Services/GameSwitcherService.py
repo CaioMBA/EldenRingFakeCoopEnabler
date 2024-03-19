@@ -8,6 +8,7 @@ from Services.Sekiro.SekiroService import Sekiro
 from Services.AWayOut.AWayOutService import AWayOut
 from Services.ItTakesTwo.ItTakesTwoService import ItTakesTwo
 from Services.Enshrouded.EnshroudedService import Enshrouded
+from Services.SonsOfTheForest.SonsOfTheForestService import SonsOfTheForest
 from Services.GameDownloaderService import GameDownloader
 
 class GameSwitcher():
@@ -39,6 +40,8 @@ class GameSwitcher():
                 return AWayOut(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case 'It Takes Two':
                 return ItTakesTwo(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
+            case 'Sons of the Forest':
+                return SonsOfTheForest(self.gamePath, self.fixPath, self.modEnginePath, self.mods, self.PirateArchives)
             case _:
                 print(f'Atenção! função SetGameFunctions não tem implementação para o jogo escolhido. Game: {self.Game}')
     def SetGamePirateArchives(self):
@@ -81,6 +84,12 @@ class GameSwitcher():
                               'steam_api64.org', 'SekiroOnlineFont.ttf', 'steam_api64_backup.dll'],
                     "Folders": []
                 }
+            case 'Sons of the Forest':
+                return {
+                    "Files": ['dlllist.txt', 'OnlineFix.ini', 'OnlineFix.url',
+                              'OnlineFix64.dll', 'SteamOverlay64.dll', 'winmm.dll'],
+                    "Folders": ['SonsOfTheForest_Data_backup']
+                }
             case _:
                 return {
                     "Files": [],
@@ -105,6 +114,8 @@ class GameSwitcher():
                 return GameDownloader().AWayOutDownloadOrUpdate(self.gamePath)
             case 'It Takes Two':
                 return GameDownloader().ItTakesTwoDownloadOrUpdate(self.gamePath)
+            case 'Sons of the Forest':
+                return GameDownloader().SonsOfTheForestDownloadOrUpdate(self.gamePath)
             case _:
                 print(f'Atenção! função CallGameDownloader não tem implementação para o jogo escolhido. Game: {self.Game}')
     def CheckIfPirateGameIsEnabled(self):

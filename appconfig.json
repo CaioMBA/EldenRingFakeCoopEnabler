@@ -19,7 +19,7 @@
     },
     "Enshrouded": {
         "GamePath": "c:\\program files (x86)\\steam\\steamapps\\common\\Enshrouded",
-        "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\Enshrouded_Pirate_FIX",
+        "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\SteamFixGames\\Enshrouded\\Enshrouded_Pirate_FIX",
         "ModsPath": "",
         "EnginePath": ""
     },
@@ -36,8 +36,14 @@
         "EnginePath": ""
     },
     "ItTakesTwo": {
-        "GamePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\ItTakesTwo",
+        "GamePath": "",
         "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\ItTakesTwo_Pirate_FIX",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "SonsOfTheForest": {
+        "GamePath": "c:\\program files (x86)\\steam\\steamapps\\common\\Sons Of The Forest",
+        "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\SteamFixGames\\Sons of the Forest\\SonsOfTheForest_Pirate_FIX",
         "ModsPath": "",
         "EnginePath": ""
     },

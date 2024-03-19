@@ -55,13 +55,6 @@ class Steam():
                 print(f'Progress {SteamGameName} download/update running... DO NOT CLOSE THE WINDOW!')
                 print(f'THIS MIGHT TAKE A WHILE SO BE PATIENT! -> it will go to -> {DownloadPath}')
 
-                # result = subprocess.run(cmd, check=True, shell=True, capture_output=True, text=True)
-                # if 'Success! App' in result.stdout and 'fully installed' in result.stdout:
-                #     print(f"{SteamGameName} Installation/Update Successful!")
-                # else:
-                #     Utils().clear_console()
-                #     print(f"{SteamGameName} Installation/Update Failed!")
-                #     continue
                 try:
                     subprocess.run(cmd, check=True, shell=True)
                 except Exception as e:

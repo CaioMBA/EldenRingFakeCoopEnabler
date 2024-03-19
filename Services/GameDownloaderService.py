@@ -48,6 +48,11 @@ class GameDownloader:
                                                  "ItTakesTwo",
                                                  DownloadPath,
                                                  r'installScript.vdf')
+    def SonsOfTheForestDownloadOrUpdate(self, DownloadPath:str=''):
+        return Steam().RunSteamCMDUpdateFunction("1326470",
+                                                 "Sons Of The Forest",
+                                                 DownloadPath,
+                                                 r'SonsOfTheForest.exe')
 
     def DownloadLinks(self, jsonDict:dict):
         print('Verifiyng and Downloading/Updating files...')

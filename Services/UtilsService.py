@@ -87,6 +87,7 @@ class Utils():
             return self.Unzip(fileName, FinalPath)
         elif fileName.endswith('.rar'):
             return self.Unrar(fileName, FinalPath)
+        print(f'FILE {fileName.upper()} EXTRACTED!')
 
     def Unzip(self, fileName:str, FinalPath:str):
         with zipfile.ZipFile(fileName, 'r') as zip_ref:
@@ -96,7 +97,6 @@ class Utils():
                     zip_ref.extract(file, FinalPath)
                     pbar.update(1)
         os.remove(fileName)
-        print(f'FILE {fileName.upper()} EXTRACTED!')
         return FinalPath
     def Unrar(self, fileName:str, FinalPath:str):
         with rarfile.RarFile(fileName, 'r') as rar_ref:
@@ -106,7 +106,6 @@ class Utils():
                     rar_ref.extract(file, FinalPath)
                     pbar.update(1)
         os.remove(fileName)
-        print(f'FILE {fileName.upper()} EXTRACTED!')
         return FinalPath
 
     def CheckIfOneDriveExists(self, finalDir:str):

@@ -23,6 +23,7 @@ class Master():
                 print('[5] -> Sekiro: Shadows Die Twice')
                 print('[6] -> A Way Out')
                 print('[7] -> It Takes Two')
+                print('[8] -> Sons of the Forest')
                 print('\t[0.1] -> Spacewar (DOWNLOAD/UPDATE ONLY)')
                 print('[0] -> Quit | Exit')
                 option = input('Choose an option(Left Number): ')
@@ -49,6 +50,9 @@ class Master():
                     case '7':
                         Utils().clear_console()
                         GameSwitcher('It Takes Two', self.jsonDict['ItTakesTwo']).Menu()
+                    case '8':
+                        Utils().clear_console()
+                        GameSwitcher('Sons of the Forest', self.jsonDict['SonsOfTheForest']).Menu()
                     case '0.1':
                         Utils().clear_console()
                         SpaceWar().Menu()

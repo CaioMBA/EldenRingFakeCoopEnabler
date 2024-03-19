@@ -2,11 +2,11 @@ import os, shutil, configparser
 from Services.UtilsService import Utils
 from Services.GameDownloaderService import GameDownloader
 
-class Sekiro():
+class SonsOfTheForest():
     def __init__(self, GamePath, fixPath, EnginePath, ModsPath, pirateArchives:dict):
         if GamePath == '' or GamePath is None:
-            path = GameDownloader().SekiroDownloadOrUpdate()
-            Utils().updateJsonConfig('Sekiro', 'GamePath', path)
+            path = GameDownloader().SonsOfTheForestDownloadOrUpdate()
+            Utils().updateJsonConfig('SonsOfTheForest', 'GamePath', path)
             print('FOR THE GAME TO WORK, YOU NEED TO RESTART THIS PROGRAM')
             return
 
@@ -48,26 +48,26 @@ class Sekiro():
             print(f"Error: {e}")
 
     def BackUpGameFolder(self):
-        if not os.path.exists(os.path.join(self.GamePath, 'steam_api64_backup.dll')):
-            os.rename(os.path.join(self.GamePath, 'steam_api64.dll'),
-                      os.path.join(self.GamePath, 'steam_api64_backup.dll'))
-        if not os.path.exists(os.path.join(self.GamePath, 'sekiro_backup.exe')):
-            os.rename(os.path.join(self.GamePath, 'sekiro.exe'),
-                      os.path.join(self.GamePath, 'sekiro_backup.exe'))
+        print('Backing up GamePath folder...')
+        if not os.path.exists(os.path.join(self.GamePath, 'SonsOfTheForest_Data_backup')):
+            shutil.copytree(os.path.join(self.GamePath, 'SonsOfTheForest_Data'),
+                            os.path.join(self.GamePath, 'SonsOfTheForest_Data_backup'))
+        print('Backed-Up Sucessfully!')
 
-    def RestoreBackUp(self):
-        if os.path.exists(os.path.join(self.GamePath, 'steam_api64_backup.dll')):
-            os.remove(os.path.join(self.GamePath, 'steam_api64.dll'))
-            os.rename(os.path.join(self.GamePath, 'steam_api64_backup.dll'),
-                      os.path.join(self.GamePath, 'steam_api64.dll'))
-        if os.path.exists(os.path.join(self.GamePath, 'sekiro_backup.exe')):
-            os.remove(os.path.join(self.GamePath, 'sekiro.exe'))
-            os.rename(os.path.join(self.GamePath, 'sekiro_backup.exe'),
-                      os.path.join(self.GamePath, 'sekiro.exe'))
+    def RestoreGameFolder(self):
+        print('Restoring Files...')
+        if os.path.exists(os.path.join(self.GamePath, 'SonsOfTheForest_Data_backup')):
+            if os.path.exists(os.path.join(self.GamePath, 'SonsOfTheForest_Data')):
+                shutil.rmtree(os.path.join(self.GamePath, 'SonsOfTheForest_Data'))
+            os.rename(os.path.join(self.GamePath, 'SonsOfTheForest_Data_backup'),
+                      os.path.join(self.GamePath, 'SonsOfTheForest_Data'))
+        print('Restored Sucessfully!')
+
+
 
     def DisablePirateGame(self):
         print("Disabling play with Pirate Game")
-        self.RestoreBackUp()
+        self.RestoreGameFolder()
         for root, dirs, files in os.walk(self.GamePath):
             for fileName in files:
                 if any(str(fileName).lower() == file.lower() for file in self.PirateArchives['Files']):
@@ -85,15 +85,15 @@ class Sekiro():
         for path in ChangingPaths:
             try:
                 config = configparser.ConfigParser()
-                filePath = os.path.join(path, 'cream_api.ini')
+                filePath = os.path.join(path, 'OnlineFix.ini')
                 if not os.path.exists(filePath):
                     print(f"The file '{filePath}' does not exist.")
                     continue
                 config.read(filePath)
                 if languageChoice == '':
-                    print(f'Current Language: {config['steam']['language']}')
+                    print(f'Current Language: {config['Main']['Language']}')
                     languageChoice = self.ShowAvailableLanguages()
-                config['steam']['language'] = languageChoice
+                config['Main']['Language'] = languageChoice
                 with open(filePath, 'w') as iniFile:
                     config.write(iniFile)
                 print(f'Language changed in {filePath}')
@@ -111,7 +111,7 @@ class Sekiro():
         while True:
             for key, value in LanguageDict.items():
                 tested = '[ TESTED LANGUAGE ]'
-                print(f"[{key}] => {value} {tested if key in [1, 2, 3] else ''}")
+                print(f"[{key}] => {value} {tested if key in [1, 2] else ''}")
 
             LanguageChoice = input("Choose the language [ ONLY NUMBER ON THE LEFT ]: ")
             if LanguageChoice.isdigit() and int(LanguageChoice) in LanguageDict.keys():
