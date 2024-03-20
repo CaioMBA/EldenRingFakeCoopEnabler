@@ -4,6 +4,11 @@ from Services.GameDownloaderService import GameDownloader
 
 class GameSwitcher():
     def __init__(self, GameName:str, jsonDict:dict):
+        if jsonDict['GamePath'] == '' or jsonDict['GamePath'] is None:
+            path = GameDownloader().DownloadGame(GameName, jsonDict['GamePath'])
+            Utils().updateJsonConfig(GameName, 'GamePath', path + r'\Game')
+            print(f'FOR {GameName} TO WORK, YOU NEED TO RESTART THIS PROGRAM')
+            return
         self.Game = GameName
         self.GamePath = jsonDict['GamePath']
         self.FixPath = jsonDict['FixPath']
