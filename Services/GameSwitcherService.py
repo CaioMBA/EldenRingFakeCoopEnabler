@@ -1,6 +1,7 @@
 import os, shutil, configparser
 from Services.UtilsService import Utils
 from Services.GameDownloaderService import GameDownloader
+from Services.EldenRing.ModsService import Mods
 
 class GameSwitcher():
     def __init__(self, GameName:str, jsonDict:dict):
@@ -13,7 +14,8 @@ class GameSwitcher():
         self.GamePath = jsonDict['GamePath']
         self.FixPath = jsonDict['FixPath']
         self.ModEnginePath = jsonDict['EnginePath']
-        self.Mods = jsonDict['ModsPath']
+        self.ModsPath = jsonDict['ModsPath']
+        self.ModsService = Mods(self.ModsPath, self.ModEnginePath, self.GamePath)
         self.PirateArchives = self.SetGamePirateArchives()
         self.BackUpFile = self.SetGameBackUpFiles()
         self.LanguagesAvailable = self.SetAvailableLanguages()
@@ -320,7 +322,7 @@ class GameSwitcher():
                         if self.Game not in self.GamesAvailableModsMenu:
                             print('MODS MENU NOT AVAILABLE FOR THIS GAME')
                             continue
-                        self.GameService.Mods.menu()
+                        self.ModsService.menu()
                     case '4':
                         Utils().clear_console()
                         GamePath = GameDownloader().DownloadGame(self.Game, self.GamePath)
