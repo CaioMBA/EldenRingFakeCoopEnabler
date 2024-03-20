@@ -44,19 +44,19 @@ class Master():
                         GameSwitcher('Lies of P', self.jsonDict['Lies of P']).Menu()
                     case '5':
                         Utils().clear_console()
-                        GameSwitcher('Sekiro: Shadows Die Twice', self.jsonDict['Sekiro']).Menu()
+                        GameSwitcher('Sekiro', self.jsonDict['Sekiro']).Menu()
                     case '6':
                         Utils().clear_console()
-                        GameSwitcher('A Way Out', self.jsonDict['AWayOut']).Menu()
+                        GameSwitcher('AWayOut', self.jsonDict['AWayOut']).Menu()
                     case '7':
                         Utils().clear_console()
-                        GameSwitcher('It Takes Two', self.jsonDict['ItTakesTwo']).Menu()
+                        GameSwitcher('ItTakesTwo', self.jsonDict['ItTakesTwo']).Menu()
                     case '8':
                         Utils().clear_console()
-                        GameSwitcher('Sons of the Forest', self.jsonDict['SonsOfTheForest']).Menu()
+                        GameSwitcher('SonsOfTheForest', self.jsonDict['SonsOfTheForest']).Menu()
                     case '9':
                         Utils().clear_console()
-                        GameSwitcher('Lords of the Fallen', self.jsonDict['LordsOfTheFallen']).Menu()
+                        GameSwitcher('LordsOfTheFallen', self.jsonDict['LordsOfTheFallen']).Menu()
                     case '0.1':
                         Utils().clear_console()
                         SpaceWar().Menu()

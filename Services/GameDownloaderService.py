@@ -6,6 +6,89 @@ from Data.OneDriveData import OneDrive
 from Data.MediaFireData import MediaFire
 from Services.UtilsService import Utils
 class GameDownloader:
+    def DownloadGame(self, gameName:str, DownloadPath:str=''):
+        gameSpecifics = {}
+        match gameName:
+            case "ELDEN RING":
+                gameSpecifics={
+                    "SteamGameName": "ELDEN RING",
+                    "SteamGameID": "1245620",
+                    "FilePathCheck": r'Game\eldenring.exe',
+                    "DownloadPath": DownloadPath
+                }
+            case "Spacewar":
+                gameSpecifics = {
+                    "SteamGameName": "Spacewar",
+                    "SteamGameID": "480",
+                    "FilePathCheck": r'SteamworksExample.exe',
+                    "DownloadPath": DownloadPath
+                }
+            case "Palworld":
+                gameSpecifics = {
+                    "SteamGameName": "Palworld",
+                    "SteamGameID": "1623730",
+                    "FilePathCheck": r'Palworld.exe',
+                    "DownloadPath": DownloadPath
+                }
+            case "Enshrouded":
+                gameSpecifics = {
+                    "SteamGameName": "Enshrouded",
+                    "SteamGameID": "1203620",
+                    "FilePathCheck": r'enshrouded.exe',
+                    "DownloadPath": DownloadPath
+                }
+            case "Lies of P":
+                gameSpecifics = {
+                    "SteamGameName": "Lies of P",
+                    "SteamGameID": "1627720",
+                    "FilePathCheck": r'LOP.exe',
+                    "DownloadPath": DownloadPath
+                }
+            case "Sekiro":
+                gameSpecifics = {
+                    "SteamGameName": "Sekiro",
+                    "SteamGameID": "814380",
+                    "FilePathCheck": r'sekiro.exe',
+                    "DownloadPath": DownloadPath
+                }
+            case "AWayOut":
+                gameSpecifics = {
+                    "SteamGameName": "AWayOut",
+                    "SteamGameID": "1222700",
+                    "FilePathCheck": r'installScript.vdf',
+                    "DownloadPath": DownloadPath
+                }
+            case "ItTakesTwo":
+                gameSpecifics = {
+                    "SteamGameName": "ItTakesTwo",
+                    "SteamGameID": "1426210",
+                    "FilePathCheck": r'installScript.vdf',
+                    "DownloadPath": DownloadPath
+                }
+            case "SonsOfTheForest":
+                gameSpecifics = {
+                    "SteamGameName": "Sons Of The Forest",
+                    "SteamGameID": "1326470",
+                    "FilePathCheck": r'SonsOfTheForest.exe',
+                    "DownloadPath": DownloadPath
+                }
+            case "LordsOfTheFallen":
+                gameSpecifics = {
+                    "SteamGameName": "Lords of the Fallen",
+                    "SteamGameID": "1501750",
+                    "FilePathCheck": r'LOTF2.exe',
+                    "DownloadPath": DownloadPath
+                }
+            case _:
+                Utils().clear_console()
+                print('GAME NOT FOUND, COULD NOT DOWNLOAD/UPDATE IT')
+                return None
+        return Steam().RunSteamCMDUpdateFunction(gameSpecifics["SteamGameID"],
+                                                 gameSpecifics["SteamGameName"],
+                                                 gameSpecifics["DownloadPath"],
+                                                 gameSpecifics["FilePathCheck"])
+
+
     def EldenRingDownloadOrUpdate(self, DownloadPath: str=''):
         return Steam().RunSteamCMDUpdateFunction("1245620",
                                                  "ELDEN RING",
@@ -16,48 +99,7 @@ class GameDownloader:
                                                  "Spacewar",
                                                  DownloadPath,
                                                  'SteamworksExample.exe')
-    def PalworldDownloadOrUpdate(self, DownloadPath:str=''):
-        return Steam().RunSteamCMDUpdateFunction("1623730",
-                                                 "Palworld",
-                                                 DownloadPath,
-                                                 'Palworld.exe')
-    def EnshroudedDownloadOrUpdate(self, DownloadPath:str=''):
-        return Steam().RunSteamCMDUpdateFunction("1203620",
-                                                 "Enshrouded",
-                                                 DownloadPath,
-                                                 'enshrouded.exe')
 
-    def LiesOfPDownloadOrUpdate(self, DownloadPath:str=''):
-        return Steam().RunSteamCMDUpdateFunction("1627720",
-                                                 "Lies of P",
-                                                 DownloadPath,
-                                                 'LOP.exe')
-    def SekiroDownloadOrUpdate(self, DownloadPath:str=''):
-        return Steam().RunSteamCMDUpdateFunction("814380",
-                                                 "Sekiro",
-                                                 DownloadPath,
-                                                 'sekiro.exe')
-
-    def AWayOutDownloadOrUpdate(self, DownloadPath:str=''):
-        return Steam().RunSteamCMDUpdateFunction("1222700",
-                                                 "AWayOut",
-                                                 DownloadPath,
-                                                 r'installScript.vdf')
-    def  ItTakesTwoDownloadOrUpdate(self, DownloadPath:str=''):
-        return Steam().RunSteamCMDUpdateFunction("1426210",
-                                                 "ItTakesTwo",
-                                                 DownloadPath,
-                                                 r'installScript.vdf')
-    def SonsOfTheForestDownloadOrUpdate(self, DownloadPath:str=''):
-        return Steam().RunSteamCMDUpdateFunction("1326470",
-                                                 "Sons Of The Forest",
-                                                 DownloadPath,
-                                                 r'SonsOfTheForest.exe')
-    def LordsOfTheFallenDownloadOrUpdate(self, DownloadPath:str=''):
-        return Steam().RunSteamCMDUpdateFunction("1501750",
-                                                 "Lords of the Fallen",
-                                                 DownloadPath,
-                                                 r'LOTF2.exe')
 
     def DownloadLinks(self, jsonDict:dict):
         print('Verifiyng and Downloading/Updating files...')
