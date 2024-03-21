@@ -29,12 +29,12 @@ class Master():
                     valueToChoose = value['key']
                     if valueToChoose in ['Enshrouded', 'ItTakesTwo']:
                         valueToChoose += ' [NOT FULLY IMPLEMENTED YET]'
-                    MenuKeys.append(key)
+                    MenuKeys.append(str(key))
                     print(f'[{key}] -> {valueToChoose}')
                 print('\t[0.1] -> Spacewar (DOWNLOAD/UPDATE ONLY)')
                 print('[0] -> Quit | Exit')
                 option = input('Choose an option(Left Number): ')
-                if int(option) in MenuKeys:
+                if option in MenuKeys:
                     Utils().clear_console()
                     GameSwitcher(DictMenu[int(option)]['key'], self.jsonDict).Menu()
                 elif option == '0.1':

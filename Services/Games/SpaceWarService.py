@@ -19,7 +19,8 @@ class SpaceWar():
     def InstallSpaceWarBySteamInterface(self):
         print('KEEP YOUR PROGRESS, AND INSTALL SPACE WAR BY STEAM INTERFACE')
         print('SETUP CONTROLLER TEMPLATE ON SPACE WAR FOR THE GAME YOU WANNA PLAY(INSIDE STEAM)!')
-        subprocess.run('steam://install/480')
+        os.system('start steam://install/480')
+
 
     def Menu(self):
         while True:
