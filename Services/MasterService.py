@@ -1,8 +1,8 @@
 import time
-from Services.GameSwitcherService import GameSwitcher
-from Services.SpaceWarService import SpaceWar
+from Services.Games.GameSwitcherService import GameSwitcher
+from Services.Games.SpaceWarService import SpaceWar
 from Services.UtilsService import Utils
-from Services.GameDownloaderService import GameDownloader
+from Services.Games.GameDownloaderService import GameDownloader
 class Master():
     def __init__(self, jsonDict: dict):
         GameDownloader().DownloadLinks(jsonDict)

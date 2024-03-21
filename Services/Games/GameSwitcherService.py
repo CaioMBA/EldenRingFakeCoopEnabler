@@ -1,7 +1,7 @@
 import os, shutil, configparser
 from Services.UtilsService import Utils
-from Services.GameDownloaderService import GameDownloader
-from Services.EldenRing.ModsService import Mods
+from Services.Games.GameDownloaderService import GameDownloader
+from Services.Mods.EldenRingModsService import Mods
 
 class GameSwitcher():
     def __init__(self, GameName:str, jsonDict:dict):
@@ -21,7 +21,8 @@ class GameSwitcher():
         self.LanguagesAvailable = self.SetAvailableLanguages()
         self.LanguageFileConfig = self.SetLanguageFileConfig()
         self.GamesAvailableChangeTextLanguage = ['ELDEN RING', 'Enshrouded',
-                                                 'Sekiro', 'AWayOut']
+                                                 'Sekiro', 'AWayOut',
+                                                 'Ready Or Not']
         self.GamesAvailableModsMenu = ['ELDEN RING']
 
     def SetGamePirateArchives(self):
@@ -75,6 +76,11 @@ class GameSwitcher():
                     "Files": ['LOTF2_backup.exe', 'LOTF2.of', 'launch_data.of'],
                     "Folders": ['Engine_backup', 'LOTF2_backup']
                 }
+            case 'Ready Or Not':
+                return {
+                    "Files": [],
+                    "Folders": ['ReadyOrNot_backup', 'Engine_backup']
+                }
             case _:
                 return {
                     "Files": [],
@@ -116,6 +122,11 @@ class GameSwitcher():
                 return {
                     "Files": [],
                     "Folders": ['SonsOfTheForest_Data']
+                }
+            case 'Ready Or Not':
+                return {
+                    "Files": [],
+                    "Folders": ['ReadyOrNot', 'Engine']
                 }
     def SetAvailableLanguages(self):
         match self.Game:

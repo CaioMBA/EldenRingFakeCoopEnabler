@@ -79,6 +79,13 @@ class GameDownloader:
                     "FilePathCheck": r'LOTF2.exe',
                     "DownloadPath": DownloadPath
                 }
+            case "Ready Or Not":
+                gameSpecifics = {
+                    "SteamGameName": "Ready Or Not",
+                    "SteamGameID": "1144200",
+                    "FilePathCheck": r'SteamworksExample.exe',
+                    "DownloadPath": DownloadPath
+            }
             case _:
                 Utils().clear_console()
                 print('GAME NOT FOUND, COULD NOT DOWNLOAD/UPDATE IT')

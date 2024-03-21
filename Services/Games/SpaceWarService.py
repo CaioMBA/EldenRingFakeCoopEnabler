@@ -1,5 +1,5 @@
 from Services.UtilsService import Utils
-from Services.GameDownloaderService import GameDownloader
+from Services.Games.GameDownloaderService import GameDownloader
 import os, time, subprocess
 
 class SpaceWar():
