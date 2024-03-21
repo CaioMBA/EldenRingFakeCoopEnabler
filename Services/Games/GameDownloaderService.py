@@ -109,11 +109,13 @@ class GameDownloader:
                                                  'SteamworksExample.exe')
 
 
-    def DownloadLinks(self, jsonDict:dict):
+    def DownloadLinks(self, jsonDict:dict, gameName:str=''):
         print('Verifiyng and Downloading/Updating files...')
         Links = GoogleDrive().GetGoogleDriveSheetAsCsv('1gOa-GoZt4C5oUtMIHTqyBtxt4CMTK3Y6Qqr5sjrEWek')
 
         for linkObj in Links:
+            if gameName != linkObj['Game']:
+                continue
             if linkObj['Game'] not in jsonDict:
                 continue
             if linkObj['JsonSubKey'] not in jsonDict[linkObj['Game']]:

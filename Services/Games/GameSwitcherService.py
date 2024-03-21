@@ -4,8 +4,11 @@ from Services.Games.GameDownloaderService import GameDownloader
 from Services.Mods.EldenRingModsService import Mods
 
 class GameSwitcher():
-    def __init__(self, GameName:str, jsonDict:dict):
+    def __init__(self, GameName:str, fullJsonDict:dict):
         print(f'Loading GameSwitcher for {GameName}...')
+        GameDownloader().DownloadLinks(fullJsonDict, GameName)
+        fullJsonDict = Utils().ReadJsonConfig()
+        jsonDict = fullJsonDict[GameName]
         self.Game = GameName
         self.GamePath = jsonDict['GamePath']
         self.FixPath = jsonDict['FixPath']
