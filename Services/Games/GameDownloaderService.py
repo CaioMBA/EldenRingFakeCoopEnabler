@@ -83,24 +83,25 @@ class GameDownloader:
                 gameSpecifics = {
                     "SteamGameName": "Ready Or Not",
                     "SteamGameID": "1144200",
-                    "FilePathCheck": r'SteamworksExample.exe',
+                    "FilePathCheck": r'ReadyOrNot.exe',
                     "DownloadPath": DownloadPath
             }
             case _:
                 Utils().clear_console()
                 print('GAME NOT FOUND, COULD NOT DOWNLOAD/UPDATE IT')
                 return None
-        return Steam().RunSteamCMDUpdateFunction(gameSpecifics["SteamGameID"],
+
+        steamResponse = Steam().RunSteamCMDUpdateFunction(gameSpecifics["SteamGameID"],
                                                  gameSpecifics["SteamGameName"],
                                                  gameSpecifics["DownloadPath"],
                                                  gameSpecifics["FilePathCheck"])
 
+        if steamResponse != None and steamResponse != '' and gameName in ['ELDEN RING']:
+            steamResponse += r'\Game'
 
-    def EldenRingDownloadOrUpdate(self, DownloadPath: str=''):
-        return Steam().RunSteamCMDUpdateFunction("1245620",
-                                                 "ELDEN RING",
-                                                 DownloadPath,
-                                                 r'Game\eldenring.exe')
+        return steamResponse
+
+
     def SpaceWarDownloadOrUpdate(self, DownloadPath:str=''):
         return Steam().RunSteamCMDUpdateFunction("480",
                                                  "Spacewar",

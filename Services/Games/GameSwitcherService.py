@@ -5,16 +5,20 @@ from Services.Mods.EldenRingModsService import Mods
 
 class GameSwitcher():
     def __init__(self, GameName:str, jsonDict:dict):
-        if jsonDict['GamePath'] == '' or jsonDict['GamePath'] is None:
-            path = GameDownloader().DownloadGame(GameName, jsonDict['GamePath'])
-            Utils().updateJsonConfig(GameName, 'GamePath', path + r'\Game')
-            print(f'FOR {GameName} TO WORK, YOU NEED TO RESTART THIS PROGRAM')
-            return
+        print(f'Loading GameSwitcher for {GameName}...')
         self.Game = GameName
         self.GamePath = jsonDict['GamePath']
         self.FixPath = jsonDict['FixPath']
         self.ModEnginePath = jsonDict['EnginePath']
         self.ModsPath = jsonDict['ModsPath']
+
+
+        if self.GamePath == '' or self.GamePath is None:
+            path = GameDownloader().DownloadGame(GameName, jsonDict['GamePath'])
+            Utils().updateJsonConfig(GameName, 'GamePath', path)
+            print(f'FOR {GameName} TO WORK, YOU NEED TO RESTART THIS PROGRAM')
+            self.GamePath = path
+
         self.ModsService = Mods(self.ModsPath, self.ModEnginePath, self.GamePath)
         self.PirateArchives = self.SetGamePirateArchives()
         self.BackUpFile = self.SetGameBackUpFiles()
@@ -24,6 +28,7 @@ class GameSwitcher():
                                                  'Sekiro', 'AWayOut',
                                                  'Ready Or Not']
         self.GamesAvailableModsMenu = ['ELDEN RING']
+        Utils().clear_console()
 
     def SetGamePirateArchives(self):
         match self.Game:
@@ -129,43 +134,35 @@ class GameSwitcher():
                     "Folders": ['ReadyOrNot', 'Engine']
                 }
     def SetAvailableLanguages(self):
-        match self.Game:
-            case 'ELDEN RING':
-                return ['english', 'brazilian', 'french', 'german', 'hungarian', 'italian',
-                        'japanese', 'koreana', 'latam', 'polish', 'russian', 'schinese',
-                        'spanish', 'tchinese', 'thai']
-            case 'Enshrouded':
-                return ['english', 'french', 'german', 'italian', 'japanese', 'koreana',
-                        'latam', 'polish', 'russian', 'schinese', 'spanish', 'tchinese']
-            case 'Sekiro':
-                return ['english', 'french', 'german', 'italian', 'japanese', 'koreana',
-                        'latam', 'polish', 'russian', 'schinese', 'spanish', 'tchinese']
-            case 'AWayOut':
-                return ['en_US', 'pt_BR', 'ru_RU']
-            case _:
-                return []
+        if self.Game in ['ELDEN RING', 'Enshrouded', 'Sekiro', 'Ready Or Not']:
+            return ['english', 'brazilian', 'french', 'german', 'hungarian', 'italian',
+                    'japanese', 'koreana', 'latam', 'polish', 'russian', 'schinese',
+                    'spanish', 'tchinese', 'thai']
+        elif self.Game in ['AWayOut']:
+            return ['en_US', 'pt_BR', 'ru_RU']
+        else:
+            return []
     def SetLanguageFileConfig(self):
-        match self.Game:
-            case 'ELDEN RING':
-                return {
-                    'Path': os.path.join(self.GamePath, 'OnlineFix.ini'),
-                    'ConfigSection': ['Main', 'Language'],
-                }
-            case 'Enshrouded':
-                return {
-                    'Path': os.path.join(self.GamePath, 'OnlineFix.ini'),
-                    'ConfigSection': ['Main', 'Language'],
-                }
-            case 'Sekiro':
-                return {
-                    'Path': os.path.join(self.GamePath, 'cream_api.ini'),
-                    'ConfigSection': ['Language', 'Language'],
-                }
-            case 'AWayOut':
-                return {
-                    'Path': os.path.join(self.GamePath, 'Haze1', 'Binaries', 'Win64', 'CPY.ini'),
-                    'ConfigSection': ['Settings', 'Language'],
-                }
+        if self.Game in ['ELDEN RING', 'Enshrouded']:
+            return {
+                'Path': os.path.join(self.GamePath, 'OnlineFix.ini'),
+                'ConfigSection': ['Main', 'Language'],
+            }
+        elif self.Game in ['Sekiro']:
+            return {
+                'Path': os.path.join(self.GamePath, 'cream_api.ini'),
+                'ConfigSection': ['Language', 'Language'],
+            }
+        elif self.Game in ['AWayOut']:
+            return {
+                'Path': os.path.join(self.GamePath, 'Haze1', 'Binaries', 'Win64', 'CPY.ini'),
+                'ConfigSection': ['Settings', 'Language'],
+            }
+        elif self.Game in ['Ready Or Not']:
+            return {
+                'Path': os.path.join(self.GamePath, 'ReadyOrNot', 'Binaries', 'Win64', 'OnlineFix.ini'),
+                'ConfigSection': ['Main', 'Language'],
+            }
 
 
     def CheckIfPirateGameIsEnabled(self):
