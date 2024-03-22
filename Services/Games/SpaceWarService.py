@@ -3,18 +3,19 @@ from Services.Games.GameDownloaderService import GameDownloader
 import os, time, subprocess
 
 class SpaceWar():
-    def __init__(self):
+    def __init__(self, DownloadPath:str=''):
         while True:
             if Utils().CheckIfAppIsRunning('steam.exe'):
-                time.sleep(1)
                 break
+            print('Trying to open Steam...')
             os.system('start steam://open/steam')
             time.sleep(2)
+        self.DownloadPath = DownloadPath
 
     def InstallSpaceWar(self):
         print('DOWNLOADING|INSTALLING SPACE WAR SO PIRATE GAMES WORK!')
         print('SETUP CONTROLLER TEMPLATE ON SPACE WAR FOR THE GAME YOU WANNA PLAY(INSIDE STEAM)!')
-        return GameDownloader().SpaceWarDownloadOrUpdate()
+        return GameDownloader().DownloadGame('Spacewar', self.DownloadPath)
 
     def InstallSpaceWarBySteamInterface(self):
         print('KEEP YOUR PROGRESS, AND INSTALL SPACE WAR BY STEAM INTERFACE')

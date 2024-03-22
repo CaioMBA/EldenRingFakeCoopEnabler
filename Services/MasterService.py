@@ -7,10 +7,11 @@ class Master():
     def __init__(self, jsonDict: dict):
         self.jsonDict = jsonDict
         self.jsonDict = Utils().FixJsonConfigValues(self.jsonDict)
+        self.SpaceWarService = SpaceWar(jsonDict['Spacewar']['GamePath'])
         print('App Config Loaded...')
         Utils().clear_console()
         if jsonDict['Spacewar']['GamePath'] == '' or jsonDict['Spacewar']['GamePath'] is None:
-            path = SpaceWar().InstallSpaceWar()
+            path = self.SpaceWarService.InstallSpaceWar()
             Utils().updateJsonConfig(key='Spacewar', subkey='GamePath', value=path)
     def menu(self):
         DictMenu = {}
@@ -41,7 +42,7 @@ class Master():
                     GameSwitcher(DictMenu[int(option)]['key'], self.jsonDict).Menu()
                 elif option == '0.1':
                     Utils().clear_console()
-                    SpaceWar().Menu()
+                    self.SpaceWarService.Menu()
                     Utils().clear_console()
                 elif option == '0':
                     Utils().clear_console()

@@ -7,106 +7,26 @@ from Data.MediaFireData import MediaFire
 from Services.UtilsService import Utils
 class GameDownloader:
     def DownloadGame(self, gameName:str, DownloadPath:str=''):
-        gameSpecifics = {}
-        match gameName:
-            case "ELDEN RING":
-                gameSpecifics={
-                    "SteamGameName": "ELDEN RING",
-                    "SteamGameID": "1245620",
-                    "FilePathCheck": r'Game\eldenring.exe',
-                    "DownloadPath": DownloadPath
-                }
-            case "Spacewar":
-                gameSpecifics = {
-                    "SteamGameName": "Spacewar",
-                    "SteamGameID": "480",
-                    "FilePathCheck": r'SteamworksExample.exe',
-                    "DownloadPath": DownloadPath
-                }
-            case "Palworld":
-                gameSpecifics = {
-                    "SteamGameName": "Palworld",
-                    "SteamGameID": "1623730",
-                    "FilePathCheck": r'Palworld.exe',
-                    "DownloadPath": DownloadPath
-                }
-            case "Enshrouded":
-                gameSpecifics = {
-                    "SteamGameName": "Enshrouded",
-                    "SteamGameID": "1203620",
-                    "FilePathCheck": r'enshrouded.exe',
-                    "DownloadPath": DownloadPath
-                }
-            case "Lies of P":
-                gameSpecifics = {
-                    "SteamGameName": "Lies of P",
-                    "SteamGameID": "1627720",
-                    "FilePathCheck": r'LOP.exe',
-                    "DownloadPath": DownloadPath
-                }
-            case "Sekiro":
-                gameSpecifics = {
-                    "SteamGameName": "Sekiro",
-                    "SteamGameID": "814380",
-                    "FilePathCheck": r'sekiro.exe',
-                    "DownloadPath": DownloadPath
-                }
-            case "AWayOut":
-                gameSpecifics = {
-                    "SteamGameName": "AWayOut",
-                    "SteamGameID": "1222700",
-                    "FilePathCheck": r'installScript.vdf',
-                    "DownloadPath": DownloadPath
-                }
-            case "ItTakesTwo":
-                gameSpecifics = {
-                    "SteamGameName": "ItTakesTwo",
-                    "SteamGameID": "1426210",
-                    "FilePathCheck": r'installScript.vdf',
-                    "DownloadPath": DownloadPath
-                }
-            case "Sons Of The Forest":
-                gameSpecifics = {
-                    "SteamGameName": "Sons Of The Forest",
-                    "SteamGameID": "1326470",
-                    "FilePathCheck": r'SonsOfTheForest.exe',
-                    "DownloadPath": DownloadPath
-                }
-            case "Lords of the Fallen":
-                gameSpecifics = {
-                    "SteamGameName": "Lords of the Fallen",
-                    "SteamGameID": "1501750",
-                    "FilePathCheck": r'LOTF2.exe',
-                    "DownloadPath": DownloadPath
-                }
-            case "Ready Or Not":
-                gameSpecifics = {
-                    "SteamGameName": "Ready Or Not",
-                    "SteamGameID": "1144200",
-                    "FilePathCheck": r'ReadyOrNot.exe',
-                    "DownloadPath": DownloadPath
-            }
-            case 'Baldurs Gate 3':
-                gameSpecifics = {
-                    "SteamGameName": "Baldurs Gate 3",
-                    "SteamGameID": "1086940",
-                    "FilePathCheck": r'InstallScript.vdf',
-                    "DownloadPath": DownloadPath
-                }
-            case _:
-                Utils().clear_console()
-                print('GAME NOT FOUND, COULD NOT DOWNLOAD/UPDATE IT')
-                return None
+        gameSpecificsArray = GoogleDrive().GetGoogleDriveSheetAsCsv('1kQRBe_Ue6Si0RVD0SIWhCXzvCb0v-6bV0njAhaDp97k')
+        gameSpecifics = next((obj for obj in gameSpecificsArray if obj['GameName'] == gameName and obj['Active'] == '1'), None)
 
-        steamResponse = Steam().RunSteamCMDUpdateFunction(gameSpecifics["SteamGameID"],
-                                                 gameSpecifics["SteamGameName"],
-                                                 gameSpecifics["DownloadPath"],
-                                                 gameSpecifics["FilePathCheck"])
+        if gameSpecifics is None:
+            Utils().clear_console()
+            print('GAME NOT FOUND, COULD NOT DOWNLOAD/UPDATE IT')
+            return None
 
-        if steamResponse != None and steamResponse != '' and gameName in ['ELDEN RING']:
-            steamResponse += r'\Game'
+        InterfaceResponse = None
+        if gameSpecifics['Interface'] == 'Steam':
+            InterfaceResponse = Steam().RunSteamCMDUpdateFunction(
+                                                 gameSpecifics["SteamGameID"],
+                                                 gameSpecifics["GameName"],
+                                                 DownloadPath,
+                                                 gameSpecifics["GameFilePathCheck"])
 
-        return steamResponse
+        if InterfaceResponse != None and InterfaceResponse != '' and gameName in ['ELDEN RING']:
+            InterfaceResponse += r'\Game'
+
+        return InterfaceResponse
 
 
     def SpaceWarDownloadOrUpdate(self, DownloadPath:str=''):
