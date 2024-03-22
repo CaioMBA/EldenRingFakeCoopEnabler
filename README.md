@@ -8,7 +8,7 @@ Here I allow people that has the ORIGINAL|NON-ORIGINAL GAME to play along.
 - [x] Install/Update Elden Ring
 - [x] Install SpaceWar
 - [x] Enable/Disable Unlock FPS Mod
-- [ ] Make other games available
+- [x] Make other games available
 
 # Link Tutorial:
 [![ELDEN RING PIRATA com SEAMLESS-COOP e DUBLAGEM PORTUGUÊS](https://img.youtube.com/vi/LlVf2nBiXhE/0.jpg)](https://www.youtube.com/watch?v=LlVf2nBiXhE)
