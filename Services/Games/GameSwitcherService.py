@@ -217,8 +217,8 @@ class GameSwitcher():
             FileExtension = file.split('.')[-1]
             FileName = file.replace(f'.{FileExtension}', '')
             if not os.path.exists(os.path.join(self.GamePath, f'{FileName}_backup.{FileExtension}')):
-                shutil.copytree(os.path.join(self.GamePath, file),
-                                os.path.join(self.GamePath, f'{FileName}_backup.{FileExtension}'))
+                os.rename(os.path.join(self.GamePath, file),
+                          os.path.join(self.GamePath, f'{FileName}_backup.{FileExtension}'))
         for folder in self.BackUpFile['Folders']:
             if not os.path.exists(os.path.join(self.GamePath, f'{folder}_backup')):
                 shutil.copytree(os.path.join(self.GamePath, folder),
