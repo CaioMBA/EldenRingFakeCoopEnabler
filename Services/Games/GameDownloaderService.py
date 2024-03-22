@@ -65,14 +65,14 @@ class GameDownloader:
                     "FilePathCheck": r'installScript.vdf',
                     "DownloadPath": DownloadPath
                 }
-            case "SonsOfTheForest":
+            case "Sons Of The Forest":
                 gameSpecifics = {
                     "SteamGameName": "Sons Of The Forest",
                     "SteamGameID": "1326470",
                     "FilePathCheck": r'SonsOfTheForest.exe',
                     "DownloadPath": DownloadPath
                 }
-            case "LordsOfTheFallen":
+            case "Lords of the Fallen":
                 gameSpecifics = {
                     "SteamGameName": "Lords of the Fallen",
                     "SteamGameID": "1501750",

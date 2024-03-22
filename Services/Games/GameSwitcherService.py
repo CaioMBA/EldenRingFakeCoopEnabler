@@ -1,7 +1,7 @@
 import os, shutil, configparser
 from Services.UtilsService import Utils
 from Services.Games.GameDownloaderService import GameDownloader
-from Services.Mods.EldenRingModsService import Mods
+from Services.Mods.ModSwitcherService import ModSwitcher
 
 class GameSwitcher():
     def __init__(self, GameName:str, fullJsonDict:dict):
@@ -15,14 +15,13 @@ class GameSwitcher():
         self.ModEnginePath = jsonDict['EnginePath']
         self.ModsPath = jsonDict['ModsPath']
 
-
         if self.GamePath == '' or self.GamePath is None:
             path = GameDownloader().DownloadGame(GameName, jsonDict['GamePath'])
             Utils().updateJsonConfig(GameName, 'GamePath', path)
             print(f'FOR {GameName} TO WORK, YOU NEED TO RESTART THIS PROGRAM')
             self.GamePath = path
 
-        self.ModsService = Mods(self.ModsPath, self.ModEnginePath, self.GamePath)
+        self.ModsService = ModSwitcher(self.Game, self.ModsPath, self.ModEnginePath, self.GamePath)
         self.PirateArchives = self.SetGamePirateArchives()
         self.BackUpFile = self.SetGameBackUpFiles()
         self.LanguagesAvailable = self.SetAvailableLanguages()
@@ -30,7 +29,6 @@ class GameSwitcher():
         self.GamesAvailableChangeTextLanguage = ['ELDEN RING', 'Enshrouded',
                                                  'Sekiro', 'AWayOut',
                                                  'Ready Or Not']
-        self.GamesAvailableModsMenu = ['ELDEN RING']
         Utils().clear_console()
 
     def SetGamePirateArchives(self):
@@ -73,13 +71,13 @@ class GameSwitcher():
                               'steam_api64.org', 'SekiroOnlineFont.ttf', 'steam_api64_backup.dll'],
                     "Folders": []
                 }
-            case 'SonsOfTheForest':
+            case 'Sons Of The Forest':
                 return {
                     "Files": ['dlllist.txt', 'OnlineFix.ini', 'OnlineFix.url',
                               'OnlineFix64.dll', 'SteamOverlay64.dll', 'winmm.dll'],
                     "Folders": ['SonsOfTheForest_Data_backup']
                 }
-            case 'LordsOfTheFallen':
+            case 'Lords of the Fallen':
                 return {
                     "Files": ['LOTF2_backup.exe', 'LOTF2.of', 'launch_data.of'],
                     "Folders": ['Engine_backup', 'LOTF2_backup']
@@ -111,7 +109,7 @@ class GameSwitcher():
                     "Files": [],
                     "Folders": ['Engine']
                 }
-            case 'LordsOfTheFallen':
+            case 'Lords of the Fallen':
                 return {
                     "Files": [],
                     "Folders": ['LOTF2', 'Engine']
@@ -126,7 +124,7 @@ class GameSwitcher():
                     "Files": ['steam_api64.dll', 'sekiro.exe'],
                     "Folders": []
                 }
-            case 'SonsOfTheForest':
+            case 'Sons Of The Forest':
                 return {
                     "Files": [],
                     "Folders": ['SonsOfTheForest_Data']
@@ -330,10 +328,7 @@ class GameSwitcher():
                         self.ChangeLanguage()
                     case '3':
                         Utils().clear_console()
-                        if self.Game not in self.GamesAvailableModsMenu:
-                            print('MODS MENU NOT AVAILABLE FOR THIS GAME')
-                            continue
-                        self.ModsService.menu()
+                        self.ModsService.Switcher()
                     case '4':
                         Utils().clear_console()
                         GamePath = GameDownloader().DownloadGame(self.Game, self.GamePath)
