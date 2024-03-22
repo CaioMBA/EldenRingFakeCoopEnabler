@@ -2,17 +2,20 @@ import time
 from Services.Games.GameSwitcherService import GameSwitcher
 from Services.Games.SpaceWarService import SpaceWar
 from Services.UtilsService import Utils
-from Services.Games.GameDownloaderService import GameDownloader
+from Services.Configs.AppConfigService import AppConfigService
 class Master():
     def __init__(self, jsonDict: dict):
         self.jsonDict = jsonDict
-        self.jsonDict = Utils().FixJsonConfigValues(self.jsonDict)
+        self.jsonDict = AppConfigService().FixAppConfigValues(self.jsonDict)
         self.SpaceWarService = SpaceWar(jsonDict['Spacewar']['GamePath'])
         print('App Config Loaded...')
         Utils().clear_console()
         if jsonDict['Spacewar']['GamePath'] == '' or jsonDict['Spacewar']['GamePath'] is None:
             path = self.SpaceWarService.InstallSpaceWar()
-            Utils().updateJsonConfig(key='Spacewar', subkey='GamePath', value=path)
+            AppConfigService().UpdateAppConfig(key='Spacewar', subkey='GamePath', value=path)
+
+
+
     def menu(self):
         DictMenu = {}
         MenuKeys = []

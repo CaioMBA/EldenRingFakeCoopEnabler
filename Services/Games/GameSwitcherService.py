@@ -1,5 +1,6 @@
 import os, shutil, configparser
 from Services.UtilsService import Utils
+from Services.Configs.AppConfigService import AppConfigService
 from Services.Games.GameDownloaderService import GameDownloader
 from Services.Mods.ModSwitcherService import ModSwitcher
 
@@ -7,7 +8,7 @@ class GameSwitcher():
     def __init__(self, GameName:str, fullJsonDict:dict):
         print(f'Loading GameSwitcher for {GameName}...')
         GameDownloader().DownloadLinks(fullJsonDict, GameName)
-        fullJsonDict = Utils().ReadJsonConfig()
+        fullJsonDict = AppConfigService().ReadAppConfig()
         jsonDict = fullJsonDict[GameName]
         self.Game = GameName
         self.GamePath = jsonDict['GamePath']
@@ -17,7 +18,7 @@ class GameSwitcher():
 
         if self.GamePath == '' or self.GamePath is None:
             path = GameDownloader().DownloadGame(GameName, jsonDict['GamePath'])
-            Utils().updateJsonConfig(GameName, 'GamePath', path)
+            AppConfigService().UpdateAppConfig(GameName, 'GamePath', path)
             print(f'FOR {GameName} TO WORK, YOU NEED TO RESTART THIS PROGRAM')
             self.GamePath = path
 
@@ -92,6 +93,11 @@ class GameSwitcher():
                     "Files": [],
                     "Folders": ['bin_backup', 'Launcher_backup']
                 }
+            case 'Sea of Thieves':
+                return {
+                    "Files": ['GDK_Helper.bat'],
+                    "Folders": ['Athena_backup']
+                }
             case _:
                 return {
                     "Files": [],
@@ -143,6 +149,11 @@ class GameSwitcher():
                 return {
                     "Files": [],
                     "Folders": ['bin', 'Launcher']
+                }
+            case 'Sea of Thieves':
+                return{
+                    "Files": [],
+                    "Folders": ['Athena']
                 }
 
     def SetAvailableLanguages(self):
@@ -350,7 +361,7 @@ class GameSwitcher():
                         GamePath = GameDownloader().DownloadGame(self.Game, self.GamePath)
                         if GamePath != None:
                             self.gamePath = GamePath
-                            Utils().updateJsonConfig(f'{self.Game}', f'GamePath', self.gamePath)
+                            AppConfigService().UpdateAppConfig(f'{self.Game}', f'GamePath', self.gamePath)
                             print(f'Download and Install {self.Game} completed! Path: {self.gamePath}')
                         else:
                             print(f'Failed to download {self.Game}')

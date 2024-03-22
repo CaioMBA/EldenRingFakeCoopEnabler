@@ -24,63 +24,10 @@ class Utils():
         finally:
             winreg.CloseKey(key)
 
-    def CreateJsonConfig(self):
-        with open(f'./appconfig.json', 'w') as f:
-            jsonDict = {
-                {
-                    "ELDEN RING": {
-                        "GamePath": input("SET ELDEN RING GAME PATH (Ex: "
-                                           r"%programfiles(x86)%\Steam\steamapps\common\ELDEN RING\Game): "),
-                        "FixPath": input("SET ELDEN RING FIX PATH (IF YOU DON'T HAVE IT PRESS [ ENTER ]): "),
-                        "EnginePath": input("SET ELDEN RING ENGINE PATH (IF YOU DON'T HAVE IT PRESS [ ENTER ]): "),
-                        "ModsPath": input("SET ELDEN RING MODS PATH (IF YOU DON'T HAVE IT PRESS [ ENTER ]): ")
-                    },
-                    "Spacewar":{
-                        "GamePath": input("SET SPACE WAR GAME PATH (Ex: "
-                                          r"%programfiles(x86)%\Steam\steamapps\common\SpaceWar): ")
-                    }
-                }
-            }
-            f.write(self.TransformDictToJson(jsonDict))
-        print("File appconfig.json successfully made!")
-
-    def updateJsonConfig(self, key: str, subkey: str, value: str):
-        with open(f'./appconfig.json', 'r+') as f:
-            jsonDict = json.load(f)
-            if subkey is not None or subkey != '':
-                jsonDict[key][subkey] = value
-            else:
-                jsonDict[key] = value
-            f.seek(0)
-            f.truncate()
-            json.dump(jsonDict, f, indent=4)
-
-    def ReadJsonConfig(self):
-        with open('appconfig.json', 'r') as f:
-            jsonString = f.read()
-            return json.loads(jsonString)
-
     def GetSecretAccounts(self):
         with open('secretAccounts.json', 'r') as f:
             jsonString = f.read()
             return json.loads(jsonString)
-
-    def FixJsonConfigValues(self, jsonDict:dict):
-        for key in jsonDict.keys():
-            for subkey in jsonDict[key].keys():
-                if jsonDict[key][subkey] is None:
-                    jsonDict[key][subkey] = ''
-                    continue
-                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%programfiles(x86)%', os.environ.get('ProgramFiles(x86)', ''))
-                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%userprofile%', os.path.expanduser('~'))
-                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%programdata%', os.environ.get('ProgramData', ''))
-                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%localappdata%', os.environ.get('LocalAppData', ''))
-                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%appdata%', os.environ.get('AppData', ''))
-                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%temp%', os.environ.get('TEMP', ''))
-                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%windir%', os.environ.get('WINDIR', ''))
-                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%systemroot%', os.environ.get('SystemRoot', ''))
-                jsonDict[key][subkey] = jsonDict[key][subkey].replace('%systemdrive%', os.environ.get('SystemDrive', ''))
-        return jsonDict
 
     def DeCompress(self, fileName:str, FinalPath:str):
         if fileName.endswith('.zip'):

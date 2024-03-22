@@ -5,6 +5,7 @@ from Data.GoogleDriveData import GoogleDrive
 from Data.OneDriveData import OneDrive
 from Data.MediaFireData import MediaFire
 from Services.UtilsService import Utils
+from Services.Configs.AppConfigService import AppConfigService
 class GameDownloader:
     def DownloadGame(self, gameName:str, DownloadPath:str=''):
         gameSpecificsArray = GoogleDrive().GetGoogleDriveSheetAsCsv('1kQRBe_Ue6Si0RVD0SIWhCXzvCb0v-6bV0njAhaDp97k')
@@ -14,7 +15,7 @@ class GameDownloader:
 
         if gameSpecifics is None:
             Utils().clear_console()
-            print('GAME NOT FOUND, COULD NOT DOWNLOAD/UPDATE IT')
+            print(f'GAME {gameName} NOT FOUND, COULD NOT DOWNLOAD/UPDATE IT')
             return None
 
         InterfaceResponse = None
@@ -51,6 +52,7 @@ class GameDownloader:
                 continue
             if jsonDict[linkObj['Game']][linkObj['JsonSubKey']] != '':
                 continue
+            shortPath = ''
             if linkObj['Origin'] == 'MediaFire':
                 shortPath = MediaFire().DownloadFile(linkObj['Links'], linkObj['fileName'])
             elif linkObj['Origin'] == 'GoogleDrive':
@@ -58,6 +60,6 @@ class GameDownloader:
             elif linkObj['Origin'] == 'OneDrive':
                 shortPath = OneDrive().DownloadFile(linkObj['Links'], linkObj['fileName'])
             shortPath = str(os.path.join(shortPath, linkObj['insideFile']))
-            Utils().updateJsonConfig(key=linkObj['Game'], subkey=linkObj['JsonSubKey'], value=shortPath)
+            AppConfigService().UpdateAppConfig(key=linkObj['Game'], subkey=linkObj['JsonSubKey'], value=shortPath)
             print(f'[{linkObj["Game"]} <-> {linkObj["JsonSubKey"]}] -> {shortPath}')
         print('All files are up to date')
