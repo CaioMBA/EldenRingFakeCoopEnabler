@@ -7,6 +7,8 @@ class Master():
     def __init__(self, jsonDict: dict):
         self.jsonDict = jsonDict
         self.jsonDict = Utils().FixJsonConfigValues(self.jsonDict)
+        print('App Config Loaded...')
+        Utils().clear_console()
         if jsonDict['Spacewar']['GamePath'] == '' or jsonDict['Spacewar']['GamePath'] is None:
             path = SpaceWar().InstallSpaceWar()
             Utils().updateJsonConfig(key='Spacewar', subkey='GamePath', value=path)

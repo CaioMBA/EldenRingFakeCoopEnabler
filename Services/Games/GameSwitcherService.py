@@ -87,6 +87,11 @@ class GameSwitcher():
                     "Files": [],
                     "Folders": ['ReadyOrNot_backup', 'Engine_backup']
                 }
+            case 'Baldurs Gate 3':
+                return {
+                    "Files": [],
+                    "Folders": ['bin_backup', 'Launcher_backup']
+                }
             case _:
                 return {
                     "Files": [],
@@ -134,8 +139,14 @@ class GameSwitcher():
                     "Files": [],
                     "Folders": ['ReadyOrNot', 'Engine']
                 }
+            case 'Baldurs Gate 3':
+                return {
+                    "Files": [],
+                    "Folders": ['bin', 'Launcher']
+                }
+
     def SetAvailableLanguages(self):
-        if self.Game in ['ELDEN RING', 'Enshrouded', 'Sekiro', 'Ready Or Not']:
+        if self.Game in ['ELDEN RING', 'Enshrouded', 'Sekiro', 'Ready Or Not', 'Baldurs Gate 3']:
             return ['english', 'brazilian', 'french', 'german', 'hungarian', 'italian',
                     'japanese', 'koreana', 'latam', 'polish', 'russian', 'schinese',
                     'spanish', 'tchinese', 'thai']
@@ -162,6 +173,11 @@ class GameSwitcher():
         elif self.Game in ['Ready Or Not']:
             return {
                 'Path': os.path.join(self.GamePath, 'ReadyOrNot', 'Binaries', 'Win64', 'OnlineFix.ini'),
+                'ConfigSection': ['Main', 'Language'],
+            }
+        elif self.Game in ['Baldurs Gate 3']:
+            return {
+                'Path': os.path.join(self.GamePath, 'bin', 'OnlineFix.ini'),
                 'ConfigSection': ['Main', 'Language'],
             }
 

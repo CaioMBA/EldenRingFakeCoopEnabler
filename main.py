@@ -11,6 +11,5 @@ if '__main__' == __name__:
         print("Caso não tenha o caminho deixe vazio")
         Utils().CreateJsonConfig()
         jsonDict = Utils().ReadJsonConfig()
-    print('App Config Loaded...')
 
     Master(jsonDict).menu()

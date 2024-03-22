@@ -86,6 +86,13 @@ class GameDownloader:
                     "FilePathCheck": r'ReadyOrNot.exe',
                     "DownloadPath": DownloadPath
             }
+            case 'Baldurs Gate 3':
+                gameSpecifics = {
+                    "SteamGameName": "Baldurs Gate 3",
+                    "SteamGameID": "1086940",
+                    "FilePathCheck": r'InstallScript.vdf',
+                    "DownloadPath": DownloadPath
+                }
             case _:
                 Utils().clear_console()
                 print('GAME NOT FOUND, COULD NOT DOWNLOAD/UPDATE IT')
