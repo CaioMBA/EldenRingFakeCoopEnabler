@@ -8,7 +8,9 @@ from Services.UtilsService import Utils
 class GameDownloader:
     def DownloadGame(self, gameName:str, DownloadPath:str=''):
         gameSpecificsArray = GoogleDrive().GetGoogleDriveSheetAsCsv('1kQRBe_Ue6Si0RVD0SIWhCXzvCb0v-6bV0njAhaDp97k')
-        gameSpecifics = next((obj for obj in gameSpecificsArray if obj['GameName'] == gameName and obj['Active'] == '1'), None)
+        gameSpecifics = next(filter(lambda obj: obj['GameName'] == gameName and obj['Active'] == '1',
+                                    gameSpecificsArray),
+                                    None)
 
         if gameSpecifics is None:
             Utils().clear_console()
