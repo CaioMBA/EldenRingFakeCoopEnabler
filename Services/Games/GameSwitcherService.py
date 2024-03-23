@@ -7,9 +7,11 @@ from Services.Mods.ModSwitcherService import ModSwitcher
 class GameSwitcher():
     def __init__(self, GameName:str, fullJsonDict:dict):
         print(f'Loading GameSwitcher for {GameName}...')
-        GameDownloader().DownloadLinks(fullJsonDict, GameName)
-        fullJsonDict = AppConfigService().ReadAppConfig()
         jsonDict = fullJsonDict[GameName]
+        if jsonDict['GamePath'] == '' or jsonDict['GamePath'] is None or jsonDict['FixPath'] == '' or jsonDict['FixPath'] is None or jsonDict['EnginePath'] == '' or jsonDict['EnginePath'] is None:
+            GameDownloader().DownloadLinks(fullJsonDict, GameName)
+            fullJsonDict = AppConfigService().ReadAppConfig()
+            jsonDict = fullJsonDict[GameName]
         self.Game = GameName
         self.GamePath = jsonDict['GamePath']
         self.FixPath = jsonDict['FixPath']
@@ -30,7 +32,7 @@ class GameSwitcher():
         self.GamesAvailableChangeTextLanguage = ['ELDEN RING', 'Enshrouded',
                                                  'Sekiro', 'AWayOut',
                                                  'Ready Or Not']
-        Utils().clear_console()
+
 
     def SetGamePirateArchives(self):
         match self.Game:
@@ -301,9 +303,7 @@ class GameSwitcher():
                     continue
                 config.read(filePath)
                 if languageChoice == '':
-
-                    print(f'Current Language: {config[LanguageSetting1][LanguageSetting2]}')
-                    languageChoice = self.ShowAvailableLanguages()
+                    languageChoice = self.ShowAvailableLanguages(config[LanguageSetting1][LanguageSetting2])
                 config[LanguageSetting1][LanguageSetting2] = languageChoice
                 with open(filePath, 'w') as iniFile:
                     config.write(iniFile)
@@ -311,13 +311,14 @@ class GameSwitcher():
             except Exception as e:
                 print(f"Warning: {e}")
         return languageChoice
-    def ShowAvailableLanguages(self):
+    def ShowAvailableLanguages(self, currentLanguage:str=''):
         Utils().clear_console()
         LanguageDict = {}
         for index, language in enumerate(self.LanguagesAvailable):
             LanguageDict[index+1] = language
 
         while True:
+            print(f'Current Language: {currentLanguage}')
             for key, value in LanguageDict.items():
                 tested = '[ TESTED LANGUAGE ]'
                 print(f"[{key}] => {value} {tested if value in ['english', 'brazilian', 'en_US', 'pt_BR'] else ''}")
@@ -328,10 +329,10 @@ class GameSwitcher():
             Utils().clear_console()
             print("Invalid choice, choose another one")
 
+
     def Menu(self):
         while True:
             try:
-                Utils().clear_console()
                 print(f"[ {self.Game.upper()} MENU ]")
                 print("Choose an option:")
                 print(f"[1] -> {'DISABLE' if self.CheckIfPirateGameIsEnabled() else 'ENABLE'} Pirate Game")

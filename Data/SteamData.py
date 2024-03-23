@@ -79,6 +79,6 @@ class Steam():
                 return DownloadPath
             except subprocess.CalledProcessError as e:
                 print(f"Failed to download {SteamGameName}, error: {e}")
-                return None
+                return ''
         print(f"Failed to download {SteamGameName} it ran out of anonymous credentials!")
-        return None
+        return ''

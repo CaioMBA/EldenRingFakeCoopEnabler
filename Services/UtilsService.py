@@ -55,12 +55,23 @@ class Utils():
         os.remove(fileName)
         return FinalPath
 
-    def CheckIfOneDriveExists(self, finalDir:str):
-        finalPath = os.path.join(os.path.expanduser(r'~'), finalDir)
-        if os.path.exists(os.path.join(os.path.expanduser(r'~'), 'OneDrive')):
-            finalPath = os.path.join(os.path.expanduser(r'~'), 'OneDrive', finalDir)
+    def GetDocumentsFolderPath(self):
+        key = winreg.HKEY_CURRENT_USER
+        sub_key = r'Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders'
+        try:
+            with winreg.OpenKey(key, sub_key) as key:
+                documents_path = winreg.QueryValueEx(key, 'Personal')[0]
+                return documents_path
+        except Exception as e:
+            print(f"Error accessing registry: {e}")
+            return None
+
+    def CheckIfPathExists(self, basePath:str, finalDir:str):
+        finalPath = os.path.join(basePath, finalDir)
+        if not os.path.exists(basePath):
+            finalPath = os.path.join(os.path.expanduser(r'~'), 'Downloads', finalDir)
         if not os.path.exists(finalPath):
-            finalPath = os.path.join(os.path.expanduser(r'~'), 'Downloads')
+            os.makedirs(finalPath)
         return finalPath
 
     def TransformJsonToDict(self, jsonString:str):
