@@ -37,7 +37,7 @@ class Utils():
             FinalPath = self.Unzip(fileName, FinalPath)
         elif fileName.endswith('.rar'):
             FinalPath = self.Unrar(fileName, FinalPath)
-        print(f'FILE {fileName.upper()} EXTRACTED!')
+        print(f'FILE {fileName.upper()} EXTRACTED => {FinalPath}')
         return FinalPath
 
     def Unzip(self, fileName:str, FinalPath:str) -> str:

@@ -1,8 +1,10 @@
 import requests, os
 from tqdm import tqdm
 from Services.UtilsService import Utils
+
+
 class WebDownloader():
-    def DownloadFile(self, download_url:str, fileName:str, finalDir:str = '') -> str:
+    def DownloadFile(self, download_url: str, fileName: str, finalDir: str = '') -> str:
         response = requests.get(download_url, stream=True)
 
         if response.status_code == 200:

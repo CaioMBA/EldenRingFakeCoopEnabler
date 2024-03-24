@@ -82,3 +82,4 @@ class GameDownloader:
             AppConfigService().UpdateAppConfig(key=linkObj['Game'], subkey=linkObj['JsonSubKey'], value=shortPath)
             listDownloaded.append(f'[{linkObj["Game"]} <-> {linkObj["JsonSubKey"]}] -> {shortPath}')
         print('All files are up to date')
+        print(f"List of Downloads and it's Paths: {listDownloaded}")

@@ -5,18 +5,16 @@ from Services.UtilsService import Utils
 from Services.Configs.AppConfigService import AppConfigService
 class Master():
     def __init__(self, jsonDict: dict):
-        self.jsonDict = jsonDict
-        self.jsonDict = AppConfigService().FixAppConfigValues(self.jsonDict)
+        self.jsonDict = AppConfigService().FixAppConfigValues(jsonDict)
         self.SpaceWarService = SpaceWar(jsonDict['Spacewar']['GamePath'])
-        print('App Config Loaded...')
         Utils().clear_console()
+        print('App Config Loaded...')
         if jsonDict['Spacewar']['GamePath'] == '' or jsonDict['Spacewar']['GamePath'] is None:
             path = self.SpaceWarService.InstallSpaceWar()
             AppConfigService().UpdateAppConfig(key='Spacewar', subkey='GamePath', value=path)
 
     def menu(self) -> None:
         DictMenu = {}
-        MenuKeys = []
         for index, (key, value) in enumerate(self.jsonDict.items()):
             DictMenu[index + 1] = {
                 "key": key,
@@ -33,12 +31,12 @@ class Master():
                     valueToChoose = value['key']
                     if valueToChoose in ['Enshrouded', 'ItTakesTwo']:
                         valueToChoose += ' [NOT FULLY IMPLEMENTED YET]'
-                    MenuKeys.append(str(key))
+
                     print(f'[{key}] -> {valueToChoose}')
                 print('\t[0.1] -> Spacewar (DOWNLOAD/UPDATE ONLY)')
                 print('[0] -> Quit | Exit')
                 option = input('Choose an option(Left Number): ')
-                if option in MenuKeys:
+                if any(option == str(key) for key in DictMenu.keys()):
                     Utils().clear_console()
                     GameSwitcher(DictMenu[int(option)]['key'], self.jsonDict).Menu()
                 elif option == '0.1':
@@ -56,5 +54,4 @@ class Master():
         except Exception as e:
             Utils().clear_console()
             print("Error:", e)
-            time.sleep(5)
             self.menu()
