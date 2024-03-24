@@ -1,11 +1,11 @@
-import io,os, zipfile, requests, subprocess, time
-from tqdm import tqdm
+import os, subprocess, time
 from Data.GoogleDriveData import GoogleDrive
 from Data.WebDownloader import WebDownloader
 from Services.UtilsService import Utils
 
+
 class Steam():
-    def InstallSteamCMD (self):
+    def InstallSteamCMD(self) -> str:
         if not os.path.exists("steamcmd"):
             os.makedirs("steamcmd")
 
@@ -14,8 +14,7 @@ class Steam():
                                             "steamcmd.zip",
                                             os.path.relpath("steamcmd"))
 
-
-    def RunSteamCMDUpdateFunction(self, GameId: str, SteamGameName: str, DownloadPath: str, filePathCheck: str):
+    def RunSteamCMDUpdateFunction(self, GameId: str, SteamGameName: str, DownloadPath: str, filePathCheck: str) -> str:
         if not os.path.exists("steamcmd"):
             self.InstallSteamCMD()
         SteamCMDPath = os.path.join(os.getcwd(), "steamcmd", "steamcmd.exe")
@@ -29,7 +28,7 @@ class Steam():
         if (DownloadPath is None or DownloadPath == '' or
                 not os.path.exists(DownloadPath) or not os.path.isdir(DownloadPath)):
             DownloadPath = Utils().get_steam_installation_directory()
-            if DownloadPath is None:
+            if DownloadPath is None or DownloadPath == '':
                 DownloadPath = os.path.expanduser('~'), 'Downloads'
 
         if not DownloadPath.endswith(SteamGameName):

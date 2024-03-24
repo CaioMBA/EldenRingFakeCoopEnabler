@@ -1,8 +1,10 @@
 from Data.GoogleDriveData import GoogleDrive
 from Services.UtilsService import Utils
 import json, os
+
+
 class AppConfigService():
-    def CreateAppConfig(self):
+    def CreateAppConfig(self) -> None:
         GamesAvailable = GoogleDrive().GetGoogleDriveSheetAsCsv('1kQRBe_Ue6Si0RVD0SIWhCXzvCb0v-6bV0njAhaDp97k')
         AppConfig = {}
         for game in GamesAvailable:
@@ -21,7 +23,7 @@ class AppConfigService():
             f.write(Utils().TransformDictToJson(AppConfig))
         print("File appconfig.json successfully made!")
 
-    def UpdateAppConfig(self, key: str, subkey: str, value: str):
+    def UpdateAppConfig(self, key: str, subkey: str, value: str) -> None:
         with open(f'./appconfig.json', 'r+') as f:
             jsonDict = json.load(f)
             if subkey is not None or subkey != '':
@@ -32,12 +34,12 @@ class AppConfigService():
             f.truncate()
             json.dump(jsonDict, f, indent=4)
 
-    def ReadAppConfig(self):
+    def ReadAppConfig(self) -> dict:
         with open('appconfig.json', 'r') as f:
             jsonString = f.read()
             return json.loads(jsonString)
 
-    def FixAppConfigValues(self, jsonDict:dict):
+    def FixAppConfigValues(self, jsonDict: dict) -> dict:
         print('Fixing appconfig values...')
         for key in jsonDict.keys():
             for subkey in jsonDict[key].keys():

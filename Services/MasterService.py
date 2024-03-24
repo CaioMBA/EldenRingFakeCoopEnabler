@@ -14,9 +14,7 @@ class Master():
             path = self.SpaceWarService.InstallSpaceWar()
             AppConfigService().UpdateAppConfig(key='Spacewar', subkey='GamePath', value=path)
 
-
-
-    def menu(self):
+    def menu(self) -> None:
         DictMenu = {}
         MenuKeys = []
         for index, (key, value) in enumerate(self.jsonDict.items()):

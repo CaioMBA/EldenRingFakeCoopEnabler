@@ -1,7 +1,7 @@
 import os, shutil, configparser, toml
 from Services.UtilsService import Utils
 class Mods():
-    def __init__(self, MainModsPath:str, EnginePath: str, EldenRingGamePath:str):
+    def __init__(self, MainModsPath: str, EnginePath: str, EldenRingGamePath: str):
         self.EldenRingGamePath = EldenRingGamePath
         self.EldenRingEnginePath = EnginePath
         self.EldenRingCoopPath = os.path.join(MainModsPath, 'EldenRing_CO-OP')
@@ -65,7 +65,8 @@ class Mods():
             }
         }
         self.ValidateModsInstalled()
-    def GetModPath(self, modName):
+
+    def GetModPath(self, modName) -> str:
         match modName:
             case 'EldenRing_CO-OP':
                 return self.EldenRingCoopPath
@@ -88,9 +89,9 @@ class Mods():
             case 'EldenRing_SkipTheIntro':
                 return self.EldenRingSkipIntro
             case _:
-                Exception = f"Mod '{modName}' not found"
-                raise Exception
-    def MoveModFilesToEldenRingMod(self, modPath:str):
+                raise ValueError(f"Mod '{modName}' not found")
+
+    def MoveModFilesToEldenRingMod(self, modPath: str) -> None:
         if modPath == '' or not os.path.exists(modPath):
             print(f"The path '{modPath}' does not exist.")
             return
@@ -111,36 +112,38 @@ class Mods():
                         os.remove(destinationFilePath)
                 shutil.copy2(sourceFilePath, destinationFilePath)
         print(f"{modPath.split('\\')[-1]} enabled!")
-    def DisableMod(self, modPath:str, modArchives: dict):
+
+    def DisableMod(self, modPath: str, modArchives: dict) -> None:
         modName = modPath.split('\\')[-1]
         print(f"Disabling {modName}")
         for root, dirs, files in os.walk(self.EldenRingGamePath):
             for fileName in files:
                 if any(str(fileName).lower() == file.lower() for file in modArchives['Files']):
-                    os.remove(os.path.join(root,fileName))
+                    os.remove(os.path.join(root, fileName))
             for dirName in dirs:
                 if any(str(dirName).lower() == Dir.lower() for Dir in modArchives['Folders']):
-                    if modName == 'EldenRing_DubPT-BR' and dirName == 'sd' and root != os.path.join(self.EldenRingGamePath,'mod'):
+                    if modName == 'EldenRing_DubPT-BR' and dirName == 'sd' and root != os.path.join(self.EldenRingGamePath, 'mod'):
                         continue
                     shutil.rmtree(os.path.join(root, dirName))
         Utils().clear_console()
         if modName == 'EldenRing_DubPT-BR':
             self.RestoreMovieFolder()
         print(f"{modName} disabled!")
-    def BackUpMovieFolder(self):
+
+    def BackUpMovieFolder(self) -> None:
         print('Backing up movie folder...')
         if not os.path.exists(os.path.join(self.EldenRingGamePath, 'movie_backup')):
-            # os.rename(os.path.join(self.EldenRingGamePath, 'movie'),
-            #           os.path.join(self.EldenRingGamePath, 'movie_backup'))
             shutil.copytree(os.path.join(self.EldenRingGamePath, 'movie'),
                             os.path.join(self.EldenRingGamePath, 'movie_backup'))
-    def RestoreMovieFolder(self):
+
+    def RestoreMovieFolder(self) -> None:
         if os.path.exists(os.path.join(self.EldenRingGamePath, 'movie_backup')):
             if os.path.exists(os.path.join(self.EldenRingGamePath, 'movie')):
                 shutil.rmtree(os.path.join(self.EldenRingGamePath, 'movie'))
             os.rename(os.path.join(self.EldenRingGamePath, 'movie_backup'),
                       os.path.join(self.EldenRingGamePath, 'movie'))
-    def SetModEngineToml(self):
+
+    def SetModEngineToml(self) -> None:
         self.ValidateModsInstalled()
         paths = [self.EldenRingEnginePath, self.EldenRingGamePath]
         for path in paths:
@@ -149,7 +152,7 @@ class Mods():
                 with open(tomlPath, 'r') as file:
                     data = toml.load(file)
 
-                #THIS IS NOT NECESSARY ANYMORE
+                # THIS IS NOT NECESSARY ANYMORE
                 # if (os.path.exists(os.path.join(path, 'winmm.dll'))
                 #         and r'SeamlessCoop\elden_ring_seamless_coop.dll' in self.EnabledEngineMods):
                 #     self.EnabledEngineMods.pop(self.EnabledEngineMods.index(r'SeamlessCoop\elden_ring_seamless_coop.dll'))
@@ -158,8 +161,10 @@ class Mods():
                 with open(tomlPath, 'w') as file:
                     toml.dump(data, file)
             except Exception as e:
+                print(f'Could not set config_eldenring.toml in {path}, error: {e}')
                 continue
-    def SetModLoaderOrderIni(self):
+
+    def SetModLoaderOrderIni(self) -> None:
         self.ValidateModsInstalled()
         paths = [self.EldenRingEnginePath, self.EldenRingGamePath]
 
@@ -171,8 +176,8 @@ class Mods():
                 config.read(iniPath)
                 config.remove_section('modloader')
                 config.add_section('modloader')
-                config.set('modloader','load_delay', str(5000))
-                config.set('modloader','show_terminal', str(0))
+                config.set('modloader', 'load_delay', str(5000))
+                config.set('modloader', 'show_terminal', str(0))
                 config.remove_section('loadorder')
                 config.add_section('loadorder')
                 for index, dll in enumerate(self.ModLoaderOrder):
@@ -180,8 +185,10 @@ class Mods():
                 with open(iniPath, 'w') as iniFile:
                     config.write(iniFile)
             except Exception as e:
+                print(f'Could not set mod_loader_config.ini in {path}, error: {e}')
                 continue
-    def CheckIfModIsEnabled(self, modArchives: dict):
+
+    def CheckIfModIsEnabled(self, modArchives: dict) -> bool:
         if modArchives == self.ModsArchives['EldenRing_DubPT-BR'] and not os.path.exists(os.path.join(self.EldenRingGamePath, 'movie_backup')):
             return False
         for root, dirs, files in os.walk(self.EldenRingGamePath):
@@ -192,7 +199,8 @@ class Mods():
                 if any(str(dirName).lower() == Dir.lower() for Dir in modArchives['Folders']):
                     return True
         return False
-    def ChooseExecution(self, ModArchives:dict, ModPath:str):
+
+    def ChooseExecution(self, ModArchives: dict, ModPath: str) -> None:
         Utils().clear_console()
         self.ValidateModsInstalled()
         if self.CheckIfModIsEnabled(ModArchives):
@@ -214,7 +222,7 @@ class Mods():
                     self.GetModEngine()
             self.SetModLoaderOrderIni()
 
-    def ValidateModsInstalled(self):
+    def ValidateModsInstalled(self) -> None:
         self.EnabledEngineMods = []
         self.ModLoaderOrder = []
         for mod in self.ModsArchives:
@@ -247,7 +255,7 @@ class Mods():
                             case 'EldenRing_SkipTheIntro':
                                 self.ModLoaderOrder.append('SkipTheIntro.dll')
 
-    def DisableAllMods(self):
+    def DisableAllMods(self) -> None:
         print('Disabling all mods')
         for mod in self.ModsArchives:
             if self.CheckIfModIsEnabled(self.ModsArchives[mod]) and mod != 'EldenRing_ModEngine':
@@ -262,7 +270,7 @@ class Mods():
         Utils().clear_console()
         print('All mods disabled!')
 
-    def ChangeCoopPassword(self):
+    def ChangeCoopPassword(self) -> str:
         ChangingPaths = [self.EldenRingGamePath, self.EldenRingCoopPath]
         newPassword = ''
         for path in ChangingPaths:
@@ -281,7 +289,7 @@ class Mods():
                 print(f"Warning: {e}")
         return newPassword
 
-    def GetModEngine(self):
+    def GetModEngine(self) -> None:
         if self.EldenRingEnginePath == '' or not os.path.exists(self.EldenRingEnginePath):
             print(f"The path '{self.EldenRingEnginePath}' does not exist.")
             return
@@ -307,7 +315,7 @@ class Mods():
         except Exception as e:
             print(f"Error: {e}")
 
-    def ReturningEnableDisable(self, modArchives: dict):
+    def ReturningEnableDisable(self, modArchives: dict) -> str:
         if self.CheckIfModIsEnabled(modArchives):
             return 'DISABLE'
         else:

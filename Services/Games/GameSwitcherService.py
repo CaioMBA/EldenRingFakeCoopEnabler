@@ -5,14 +5,14 @@ from Services.Games.GameDownloaderService import GameDownloader
 from Services.Mods.ModSwitcherService import ModSwitcher
 
 class GameSwitcher():
-    def __init__(self, GameName:str, fullJsonDict:dict):
+    def __init__(self, GameName: str, fullJsonDict: dict):
         print(f'Loading GameSwitcher for {GameName}...')
         jsonDict = fullJsonDict[GameName]
         if jsonDict['GamePath'] == '' or jsonDict['GamePath'] is None or jsonDict['FixPath'] == '' or jsonDict['FixPath'] is None or jsonDict['EnginePath'] == '' or jsonDict['EnginePath'] is None:
             GameDownloader().DownloadLinks(fullJsonDict, GameName)
             fullJsonDict = AppConfigService().ReadAppConfig()
             jsonDict = fullJsonDict[GameName]
-        self.Game = GameName
+        self.Game: str = GameName
         self.GamePath = jsonDict['GamePath']
         self.FixPath = jsonDict['FixPath']
         self.ModEnginePath = jsonDict['EnginePath']
@@ -33,8 +33,7 @@ class GameSwitcher():
                                                  'Sekiro', 'AWayOut',
                                                  'Ready Or Not']
 
-
-    def SetGamePirateArchives(self):
+    def SetGamePirateArchives(self) -> dict:
         match self.Game:
             case 'ELDEN RING':
                 return {
@@ -105,7 +104,8 @@ class GameSwitcher():
                     "Files": [],
                     "Folders": []
                 }
-    def SetGameBackUpFiles(self):
+
+    def SetGameBackUpFiles(self) -> dict:
         match self.Game:
             case 'AWayOut':
                 return {
@@ -153,12 +153,12 @@ class GameSwitcher():
                     "Folders": ['bin', 'Launcher']
                 }
             case 'Sea of Thieves':
-                return{
+                return {
                     "Files": [],
                     "Folders": ['Athena']
                 }
 
-    def SetAvailableLanguages(self):
+    def SetAvailableLanguages(self) -> list[str]:
         if self.Game in ['ELDEN RING', 'Enshrouded', 'Sekiro', 'Ready Or Not', 'Baldurs Gate 3']:
             return ['english', 'brazilian', 'french', 'german', 'hungarian', 'italian',
                     'japanese', 'koreana', 'latam', 'polish', 'russian', 'schinese',
@@ -167,7 +167,8 @@ class GameSwitcher():
             return ['en_US', 'pt_BR', 'ru_RU']
         else:
             return []
-    def SetLanguageFileConfig(self):
+
+    def SetLanguageFileConfig(self) -> dict:
         if self.Game in ['ELDEN RING', 'Enshrouded']:
             return {
                 'Path': os.path.join(self.GamePath, 'OnlineFix.ini'),
@@ -194,8 +195,7 @@ class GameSwitcher():
                 'ConfigSection': ['Main', 'Language'],
             }
 
-
-    def CheckIfPirateGameIsEnabled(self):
+    def CheckIfPirateGameIsEnabled(self) -> bool:
         for root, dirs, files in os.walk(self.GamePath):
             for fileName in files:
                 if any(str(fileName).lower() == str(file).lower() for file in self.PirateArchives['Files']):
@@ -206,7 +206,7 @@ class GameSwitcher():
         return False
 
 
-    def EnablePirateGame(self):
+    def EnablePirateGame(self) -> None:
         if self.FixPath == '' or not os.path.exists(self.FixPath):
             print(f"The path '{self.FixPath}' does not exist.")
             return
@@ -236,9 +236,10 @@ class GameSwitcher():
 
         except Exception as e:
             print(f"Error: {e}")
-    def BackUpGameFolder(self):
+
+    def BackUpGameFolder(self) -> None:
         print('Backing up game specific files/folders...')
-        if self.BackUpFile == None:
+        if self.BackUpFile is None:
             Utils().clear_console()
             print('No files/folders to backup')
             return
@@ -250,13 +251,14 @@ class GameSwitcher():
                           os.path.join(self.GamePath, f'{FileName}_backup.{FileExtension}'))
         for folder in self.BackUpFile['Folders']:
             if not os.path.exists(os.path.join(self.GamePath, f'{folder}_backup')):
-                shutil.copytree(os.path.join(self.GamePath, folder),
+                shutil.copytree(os.path.join(self.GamePath, str(folder)),
                                 os.path.join(self.GamePath, f'{folder}_backup'))
         Utils().clear_console()
         print('Backed-Up Sucessfully!')
-    def RestoreGameFolder(self):
+
+    def RestoreGameFolder(self) -> None:
         print('Restoring game specific files/folders...')
-        if self.BackUpFile == None:
+        if self.BackUpFile is None:
             Utils().clear_console()
             print('No files/folders to restore')
             return
@@ -276,7 +278,8 @@ class GameSwitcher():
 
         Utils().clear_console()
         print('Restored Sucessfully!')
-    def DisablePirateGame(self):
+
+    def DisablePirateGame(self) -> None:
         print("Disabling play with Pirate Game")
         self.RestoreGameFolder()
         for root, dirs, files in os.walk(self.GamePath):
@@ -289,7 +292,7 @@ class GameSwitcher():
         Utils().clear_console()
         print("Pirate Game Disabled!")
 
-    def ChangeLanguage(self):
+    def ChangeLanguage(self) -> str:
         ChangingPaths = [self.FixPath, self.GamePath]
         languageChoice = ''
         LanguageSetting1 = self.LanguageFileConfig['ConfigSection'][0]
@@ -311,7 +314,8 @@ class GameSwitcher():
             except Exception as e:
                 print(f"Warning: {e}")
         return languageChoice
-    def ShowAvailableLanguages(self, currentLanguage:str=''):
+
+    def ShowAvailableLanguages(self, currentLanguage: str = '') -> str:
         Utils().clear_console()
         LanguageDict = {}
         for index, language in enumerate(self.LanguagesAvailable):
@@ -360,10 +364,10 @@ class GameSwitcher():
                     case '4':
                         Utils().clear_console()
                         GamePath = GameDownloader().DownloadGame(self.Game, self.GamePath)
-                        if GamePath != None:
-                            self.gamePath = GamePath
-                            AppConfigService().UpdateAppConfig(f'{self.Game}', f'GamePath', self.gamePath)
-                            print(f'Download and Install {self.Game} completed! Path: {self.gamePath}')
+                        if GamePath is not None and GamePath != '':
+                            self.GamePath = GamePath
+                            AppConfigService().UpdateAppConfig(f'{self.Game}', f'GamePath', self.GamePath)
+                            print(f'Download and Install {self.Game} completed! Path: {self.GamePath}')
                         else:
                             print(f'Failed to download {self.Game}')
 

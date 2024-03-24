@@ -2,15 +2,15 @@ import requests
 from Services.UtilsService import Utils
 from Data.WebDownloader import WebDownloader
 
+
 class GoogleDrive():
-    def DownloadGoogleDriveFile(self, Id: str, fileName:str):
-        print(f'INICIANDO DOWNLOAD ARQUIVO! => {fileName} !')
+    def DownloadGoogleDriveFile(self, Id: str, fileName: str) -> str:
+        print(f'Starting download => {fileName} !')
         download_url = f'https://drive.google.com/uc?export=download&id={Id}'
 
         return WebDownloader().DownloadFile(download_url, fileName)
 
-
-    def GetGoogleDriveSheetAsCsv(self, Id: str):
+    def GetGoogleDriveSheetAsCsv(self, Id: str) -> list:
         doc_url = f'https://docs.google.com/spreadsheets/d/{Id}/export?format=csv'
 
         response = requests.get(doc_url, stream=True)
