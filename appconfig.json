@@ -1,71 +1,77 @@
 {
-	"ELDEN RING": {
-		"GamePath": "",
-		"FixPath": "",
-		"ModsPath": "",
-		"EnginePath": ""
-	},
-	"Lies of P": {
-		"GamePath": "",
-		"FixPath": "",
-		"ModsPath": "",
-		"EnginePath": ""
-	},
-	"Palworld": {
-		"GamePath": "",
-		"FixPath": "",
-		"ModsPath": "",
-		"EnginePath": ""
-	},
-	"Enshrouded": {
-		"GamePath": "",
-		"FixPath": "",
-		"ModsPath": "",
-		"EnginePath": ""
-	},
-	"Sekiro": {
-		"GamePath": "",
-		"FixPath": "",
-		"ModsPath": "",
-		"EnginePath": ""
-	},
-	"AWayOut": {
-		"GamePath": "",
-		"FixPath": "",
-		"ModsPath": "",
-		"EnginePath": ""
-	},
-	"ItTakesTwo": {
-		"GamePath": "",
-		"FixPath": "",
-		"ModsPath": "",
-		"EnginePath": ""
-	},
-	"Sons Of The Forest": {
-		"GamePath": "",
-		"FixPath": "",
-		"ModsPath": "",
-		"EnginePath": ""
-	},
-	"Lords of the Fallen": {
-		"GamePath": "",
-		"FixPath": "",
-		"ModsPath": "",
-		"EnginePath": ""
-	},
-	"Ready Or Not": {
-		"GamePath": "",
-		"FixPath": "",
-		"ModsPath": "",
-		"EnginePath": ""
-	},
-	"Baldurs Gate 3": {
-		"GamePath": "",
-		"FixPath": "",
-		"ModsPath": "",
-		"EnginePath": ""
-	},
-	"Spacewar": {
-		"GamePath": ""
-	}
+    "ELDEN RING": {
+        "GamePath": "c:\\program files (x86)\\steam\\steamapps\\common\\ELDEN RING\\Game",
+        "FixPath": "C:\\Users\\caiom\\OneDrive\\Documents\\EldenRing_FIX_PIRATE_ORIGINAL",
+        "ModsPath": "C:\\Users\\caiom\\OneDrive\\Documents\\EldenRing_Mods",
+        "EnginePath": "C:\\Users\\caiom\\OneDrive\\Documents\\EldenRing_Engine"
+    },
+    "Spacewar": {
+        "GamePath": "c:\\program files (x86)\\steam\\steamapps\\common\\Spacewar"
+    },
+    "Palworld": {
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "Enshrouded": {
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "Lies of P": {
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "Sekiro": {
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "AWayOut": {
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "ItTakesTwo": {
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "Sons Of The Forest": {
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "Lords of the Fallen": {
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "Ready Or Not": {
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "Baldurs Gate 3": {
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
+    },
+    "Sea of Thieves": {
+        "GamePath": "",
+        "FixPath": "",
+        "ModsPath": "",
+        "EnginePath": ""
+    }
 }
