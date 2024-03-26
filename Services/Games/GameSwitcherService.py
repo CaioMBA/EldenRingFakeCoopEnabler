@@ -99,6 +99,12 @@ class GameSwitcher():
                     "Files": ['GDK_Helper.bat'],
                     "Folders": ['Athena_backup']
                 }
+            case 'Stardew Valley':
+                return {
+                    "Files": ['OnlineFix.ini', 'OnlineFix64.dll',
+                              'winmm.dll', 'dlllist.txt', 'OnlineFix.url'],
+                    "Folders": []
+                }
             case _:
                 return {
                     "Files": [],
@@ -159,7 +165,7 @@ class GameSwitcher():
                 }
 
     def SetAvailableLanguages(self) -> list[str]:
-        if self.Game in ['ELDEN RING', 'Enshrouded', 'Sekiro', 'Ready Or Not', 'Baldurs Gate 3']:
+        if self.Game in ['ELDEN RING', 'Enshrouded', 'Sekiro', 'Ready Or Not', 'Baldurs Gate 3', 'Stardew Valley']:
             return ['english', 'brazilian', 'french', 'german', 'hungarian', 'italian',
                     'japanese', 'koreana', 'latam', 'polish', 'russian', 'schinese',
                     'spanish', 'tchinese', 'thai']
@@ -169,7 +175,7 @@ class GameSwitcher():
             return []
 
     def SetLanguageFileConfig(self) -> dict:
-        if self.Game in ['ELDEN RING', 'Enshrouded']:
+        if self.Game in ['ELDEN RING', 'Enshrouded', 'Stardew Valley']:
             return {
                 'Path': os.path.join(self.GamePath, 'OnlineFix.ini'),
                 'ConfigSection': ['Main', 'Language'],

@@ -32,6 +32,8 @@ class GameDownloader:
                 gameSpecifics["GameName"],
                 DownloadPath,
                 gameSpecifics["GameFilePathCheck"])
+        elif gameSpecifics['Interface'] == 'Torrent':
+            InterfaceResponse = OneDrive().DownloadFile(gameSpecifics['GameLink'], gameSpecifics['zipFile'])
 
         if InterfaceResponse is not None and InterfaceResponse != '' and gameName == 'ELDEN RING':
             InterfaceResponse += r'\Game'
@@ -45,14 +47,18 @@ class GameDownloader:
                                                  'SteamworksExample.exe')
 
     def ShowGameValues(self, gameSpecifics: dict) -> None:
+        print('\n')
         try:
             print('[ GAME VALUES ]')
             print(f'Steam ID: {gameSpecifics["SteamGameID"]}')
             print(f'Game Name: {gameSpecifics["GameName"]}')
             print(f'File Path Check: {gameSpecifics["GameFilePathCheck"]}')
             print(f'Interface: {gameSpecifics["Interface"]}')
+            print(f'Game Link: {gameSpecifics["GameLink"]}')
+            print(f'CompressedInstaller: {gameSpecifics["zipFile"]}')
         except Exception as e:
             print(f'Error while trying to show game values, Error: {e}')
+        print('\n')
 
     def DownloadLinks(self, jsonDict: dict, gameName: str = '') -> None:
         print(f'Verifiyng and Downloading/Updating files for {gameName}...')
@@ -82,4 +88,4 @@ class GameDownloader:
             AppConfigService().UpdateAppConfig(key=linkObj['Game'], subkey=linkObj['JsonSubKey'], value=shortPath)
             listDownloaded.append(f'[{linkObj["Game"]} <-> {linkObj["JsonSubKey"]}] -> {shortPath}')
         print('All files are up to date')
-        print(f"List of Downloads and it's Paths: {listDownloaded}")
+        print(f"List of Downloads and it's Paths: {listDownloaded}\n")
